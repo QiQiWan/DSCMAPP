@@ -344,20 +344,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\WQW\\.nuget\\packages\\": {}
+    "C:\\Users\\EatRice\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+      "projectUniqueName": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
       "projectName": "Gray",
-      "projectPath": "G:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
-      "packagesPath": "C:\\Users\\WQW\\.nuget\\packages\\",
-      "outputPath": "G:\\study\\C#实验\\数字图像\\gray\\obj\\",
+      "projectPath": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+      "packagesPath": "C:\\Users\\EatRice\\.nuget\\packages\\",
+      "outputPath": "H:\\study\\C#实验\\数字图像\\gray\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\WQW\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\EatRice\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

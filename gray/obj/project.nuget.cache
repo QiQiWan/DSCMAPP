@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "f9lDw7zqizVIz5+m/OvzLFh0nBu7Dn12oDVOt53vBEw3TAaK2XcR0MdwIfm/IbgRWq06wG6gYfIc6AQZF3Lk0w==",
+  "success": true,
+  "projectFilePath": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\EatRice\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\EatRice\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
+    "C:\\Users\\EatRice\\.nuget\\packages\\system.runtime.interopservices.runtimeinformation\\4.3.0\\system.runtime.interopservices.runtimeinformation.4.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

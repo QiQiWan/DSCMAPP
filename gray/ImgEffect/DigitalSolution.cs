@@ -180,14 +180,4 @@ namespace Gray
             }
         }
     }
-
-    class imageAnalyse
-    {
-        private readonly Bitmap bitmap;
-
-        ~imageAnalyse()
-        {
-            Shell.WriteLine(">>> 图片分析器的内存已释放!");
-        }
-    }
 }

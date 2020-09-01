@@ -34,12 +34,7 @@
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.graying = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.removeBG = new System.Windows.Forms.Button();
             this.average2BW = new System.Windows.Forms.Button();
-            this.GetCorrelationMap = new System.Windows.Forms.Button();
-            this.widthLimit = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.GetCorrelationBut = new System.Windows.Forms.Button();
             this.EstablishCoordinate = new System.Windows.Forms.Button();
             this.shift = new System.Windows.Forms.Button();
             this.imageCol = new System.Windows.Forms.ComboBox();
@@ -78,6 +73,9 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Gaossion = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.GaossionCor = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -134,12 +132,10 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.removeBG);
-            this.groupBox1.Controls.Add(this.average2BW);
-            this.groupBox1.Controls.Add(this.GetCorrelationMap);
-            this.groupBox1.Controls.Add(this.widthLimit);
+            this.groupBox1.Controls.Add(this.GaossionCor);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.GetCorrelationBut);
+            this.groupBox1.Controls.Add(this.Gaossion);
+            this.groupBox1.Controls.Add(this.average2BW);
             this.groupBox1.Controls.Add(this.EstablishCoordinate);
             this.groupBox1.Controls.Add(this.shift);
             this.groupBox1.Controls.Add(this.imageCol);
@@ -170,73 +166,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "工作空间";
             // 
-            // removeBG
-            // 
-            this.removeBG.Font = new System.Drawing.Font("SimSun", 12F);
-            this.removeBG.Location = new System.Drawing.Point(25, 544);
-            this.removeBG.Margin = new System.Windows.Forms.Padding(4);
-            this.removeBG.Name = "removeBG";
-            this.removeBG.Size = new System.Drawing.Size(138, 32);
-            this.removeBG.TabIndex = 27;
-            this.removeBG.Text = "去除背景";
-            this.removeBG.UseVisualStyleBackColor = true;
-            this.removeBG.Click += new System.EventHandler(this.RemoveBG_Click);
-            // 
             // average2BW
             // 
             this.average2BW.Font = new System.Drawing.Font("SimSun", 12F);
-            this.average2BW.Location = new System.Drawing.Point(342, 515);
+            this.average2BW.Location = new System.Drawing.Point(25, 451);
             this.average2BW.Margin = new System.Windows.Forms.Padding(4);
             this.average2BW.Name = "average2BW";
-            this.average2BW.Size = new System.Drawing.Size(153, 32);
+            this.average2BW.Size = new System.Drawing.Size(138, 31);
             this.average2BW.TabIndex = 26;
             this.average2BW.Text = "平均二值";
             this.average2BW.UseVisualStyleBackColor = true;
             this.average2BW.Click += new System.EventHandler(this.Average2BW_Click);
-            // 
-            // GetCorrelationMap
-            // 
-            this.GetCorrelationMap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.GetCorrelationMap.Font = new System.Drawing.Font("SimSun", 12F);
-            this.GetCorrelationMap.Location = new System.Drawing.Point(25, 497);
-            this.GetCorrelationMap.Margin = new System.Windows.Forms.Padding(4);
-            this.GetCorrelationMap.Name = "GetCorrelationMap";
-            this.GetCorrelationMap.Size = new System.Drawing.Size(138, 26);
-            this.GetCorrelationMap.TabIndex = 25;
-            this.GetCorrelationMap.Tag = "搜索参考图像的对应子区,并生成对应表";
-            this.GetCorrelationMap.Text = "搜索对应子区";
-            this.GetCorrelationMap.UseVisualStyleBackColor = true;
-            this.GetCorrelationMap.Click += new System.EventHandler(this.GetCorrelationMap_Click);
-            // 
-            // widthLimit
-            // 
-            this.widthLimit.Location = new System.Drawing.Point(418, 446);
-            this.widthLimit.Name = "widthLimit";
-            this.widthLimit.Size = new System.Drawing.Size(77, 30);
-            this.widthLimit.TabIndex = 24;
-            this.widthLimit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WidthLimit_KeyPress);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(186, 456);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(199, 20);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "图片小块的大小/像素";
-            // 
-            // GetCorrelationBut
-            // 
-            this.GetCorrelationBut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.GetCorrelationBut.Font = new System.Drawing.Font("SimSun", 12F);
-            this.GetCorrelationBut.Location = new System.Drawing.Point(25, 453);
-            this.GetCorrelationBut.Margin = new System.Windows.Forms.Padding(4);
-            this.GetCorrelationBut.Name = "GetCorrelationBut";
-            this.GetCorrelationBut.Size = new System.Drawing.Size(138, 26);
-            this.GetCorrelationBut.TabIndex = 22;
-            this.GetCorrelationBut.Text = "相关度分析";
-            this.GetCorrelationBut.UseVisualStyleBackColor = true;
-            this.GetCorrelationBut.Click += new System.EventHandler(this.Button1_Click);
             // 
             // EstablishCoordinate
             // 
@@ -430,31 +370,31 @@
             this.另存问ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(64, 29);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 打开分析文件ToolStripMenuItem
             // 
             this.打开分析文件ToolStripMenuItem.Name = "打开分析文件ToolStripMenuItem";
-            this.打开分析文件ToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.打开分析文件ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.打开分析文件ToolStripMenuItem.Text = "打开分析文件";
             // 
             // 保存ToolStripMenuItem
             // 
             this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.保存ToolStripMenuItem.Text = "保存";
             // 
             // 另存问ToolStripMenuItem
             // 
             this.另存问ToolStripMenuItem.Name = "另存问ToolStripMenuItem";
-            this.另存问ToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.另存问ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.另存问ToolStripMenuItem.Text = "另存为";
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(216, 30);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click_1);
             // 
@@ -464,25 +404,25 @@
             this.更改图片ToolStripMenuItem,
             this.重新计算ToolStripMenuItem});
             this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
-            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(64, 29);
+            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.编辑ToolStripMenuItem.Text = "编辑";
             // 
             // 更改图片ToolStripMenuItem
             // 
             this.更改图片ToolStripMenuItem.Name = "更改图片ToolStripMenuItem";
-            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(170, 30);
+            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(178, 30);
             this.更改图片ToolStripMenuItem.Text = "更改图片";
             // 
             // 重新计算ToolStripMenuItem
             // 
             this.重新计算ToolStripMenuItem.Name = "重新计算ToolStripMenuItem";
-            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(170, 30);
+            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(178, 30);
             this.重新计算ToolStripMenuItem.Text = "重新计算";
             // 
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(64, 29);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // statusStrip1
@@ -541,13 +481,13 @@
             // mouseStrip
             // 
             this.mouseStrip.Name = "mouseStrip";
-            this.mouseStrip.Size = new System.Drawing.Size(42, 21);
+            this.mouseStrip.Size = new System.Drawing.Size(42, 20);
             this.mouseStrip.Text = "鼠标:";
             // 
             // average
             // 
             this.average.Name = "average";
-            this.average.Size = new System.Drawing.Size(72, 21);
+            this.average.Size = new System.Drawing.Size(72, 20);
             this.average.Text = "平均灰度:";
             // 
             // groupBox2
@@ -563,6 +503,36 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            // 
+            // Gaossion
+            // 
+            this.Gaossion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Gaossion.Font = new System.Drawing.Font("SimSun", 12F);
+            this.Gaossion.Location = new System.Drawing.Point(175, 451);
+            this.Gaossion.Margin = new System.Windows.Forms.Padding(4);
+            this.Gaossion.Name = "Gaossion";
+            this.Gaossion.Size = new System.Drawing.Size(112, 31);
+            this.Gaossion.TabIndex = 27;
+            this.Gaossion.Text = "高斯平滑";
+            this.Gaossion.UseVisualStyleBackColor = true;
+            this.Gaossion.Click += new System.EventHandler(this.Gaossion_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(294, 456);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 20);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "高斯系数";
+            // 
+            // GaossionCor
+            // 
+            this.GaossionCor.Location = new System.Drawing.Point(397, 451);
+            this.GaossionCor.Name = "GaossionCor";
+            this.GaossionCor.Size = new System.Drawing.Size(77, 30);
+            this.GaossionCor.TabIndex = 29;
+            this.GaossionCor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GaossionCor_KeyPress);
             // 
             // Main
             // 
@@ -638,15 +608,13 @@
         private System.Windows.Forms.ComboBox imageCol;
         private System.Windows.Forms.Button shift;
         private System.Windows.Forms.Button EstablishCoordinate;
-        private System.Windows.Forms.Button GetCorrelationBut;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox widthLimit;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Button GetCorrelationMap;
         private System.Windows.Forms.Button average2BW;
-        private System.Windows.Forms.Button removeBG;
         private System.Windows.Forms.ToolStripStatusLabel average;
+        private System.Windows.Forms.TextBox GaossionCor;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button Gaossion;
     }
 }
 

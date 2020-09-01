@@ -19,3 +19,11 @@ G:\study\C#实验\数字图像\gray\obj\Debug\Gray.Properties.Resources.resource
 G:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe
 G:\study\C#实验\数字图像\gray\obj\Debug\Gray.pdb
 G:\study\C#实验\数字图像\gray\obj\Debug\Gray.Main.resources
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csprojAssemblyReference.cache
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe.config
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.Main.resources
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.Properties.Resources.resources
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.GenerateResource.cache
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.CoreCompileInputs.cache
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.pdb

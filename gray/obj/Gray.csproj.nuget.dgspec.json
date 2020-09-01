@@ -1,0 +1,57 @@
+{
+  "format": 1,
+  "restore": {
+    "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj": {}
+  },
+  "projects": {
+    "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+        "projectName": "Gray",
+        "projectPath": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+        "packagesPath": "C:\\Users\\EatRice\\.nuget\\packages\\",
+        "outputPath": "H:\\study\\C#实验\\数字图像\\gray\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\EatRice\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net45"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net45": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net45": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

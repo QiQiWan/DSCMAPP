@@ -1,8 +1,8 @@
-﻿using MyTools.OpenProperties;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using MyTools.MathModel;
 
 namespace Gray
 {
@@ -402,23 +402,18 @@ namespace Gray
                 if ((e.KeyChar < '0') || (e.KeyChar > '9'))
                     e.Handled = true;
         }
+        private void GaossionCor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != '\b')
+                if ((e.KeyChar < '0') || (e.KeyChar > '9'))
+                    e.Handled = true;
+        }
         #endregion
         private void EstablishCoordinate_Click(object sender, EventArgs e)
         {
             if (previewBox.Image == null)
             {
                 Shell.WriteLine("### 需要先有图片!");
-                return;
-            }
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            if (widthLimit.Text.Length < 1)
-                return;
-            if (imageCollection[0].bitmap == null || imageCollection[1].bitmap == null)
-            {
-                Shell.WriteLine("### 确保选好了参考图片和变形图片!");
                 return;
             }
         }
@@ -434,14 +429,25 @@ namespace Gray
             DisplayImage(previewBox, bitmap);
         }
 
-        private void RemoveBG_Click(object sender, EventArgs e)
-        {
-            previewBox.Image = RGBGraying.removeBG(previewBox.Image);
-        }
-
         private void 退出ToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void Gaossion_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = orginBitmap;
+            if (!RGBGraying.isGrayImage(bitmap))
+                throw new Exception("图片不是灰度图片!");
+            byte[] bitmapBuff = ImageHelper.GetImgArr(bitmap);
+
+            double σ;
+            if (!Double.TryParse(GaossionCor.Text, out σ))
+                σ = 1;
+            int width = bitmap.Width, height = bitmap.Height;
+            bitmapBuff = ImageAnalyse.IntMatrix2Bytes(ImageAnalyse.GaussionBlur(ImageAnalyse.Bytes2IntMatrix(bitmapBuff, width, height), σ));
+            bitmap = ImageHelper.WriteImg(bitmapBuff, width, height);
+            DisplayImage(previewBox, bitmap);
         }
     }
 }
