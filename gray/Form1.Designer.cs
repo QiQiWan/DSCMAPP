@@ -34,6 +34,9 @@
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.graying = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GaossionCor = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.Gaossion = new System.Windows.Forms.Button();
             this.average2BW = new System.Windows.Forms.Button();
             this.EstablishCoordinate = new System.Windows.Forms.Button();
             this.shift = new System.Windows.Forms.Button();
@@ -73,9 +76,12 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Gaossion = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.GaossionCor = new System.Windows.Forms.TextBox();
+            this.reset = new System.Windows.Forms.Button();
+            this.DOG = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.G1 = new System.Windows.Forms.Label();
+            this.G2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -132,6 +138,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.G2);
+            this.groupBox1.Controls.Add(this.G1);
+            this.groupBox1.Controls.Add(this.textBox3);
+            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.DOG);
+            this.groupBox1.Controls.Add(this.reset);
             this.groupBox1.Controls.Add(this.GaossionCor);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.Gaossion);
@@ -165,6 +177,35 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "工作空间";
+            // 
+            // GaossionCor
+            // 
+            this.GaossionCor.Location = new System.Drawing.Point(397, 451);
+            this.GaossionCor.Name = "GaossionCor";
+            this.GaossionCor.Size = new System.Drawing.Size(77, 30);
+            this.GaossionCor.TabIndex = 29;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(294, 456);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 20);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "高斯系数";
+            // 
+            // Gaossion
+            // 
+            this.Gaossion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Gaossion.Font = new System.Drawing.Font("SimSun", 12F);
+            this.Gaossion.Location = new System.Drawing.Point(175, 451);
+            this.Gaossion.Margin = new System.Windows.Forms.Padding(4);
+            this.Gaossion.Name = "Gaossion";
+            this.Gaossion.Size = new System.Drawing.Size(112, 31);
+            this.Gaossion.TabIndex = 27;
+            this.Gaossion.Text = "高斯平滑";
+            this.Gaossion.UseVisualStyleBackColor = true;
+            this.Gaossion.Click += new System.EventHandler(this.Gaossion_Click);
             // 
             // average2BW
             // 
@@ -504,35 +545,62 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // Gaossion
+            // reset
             // 
-            this.Gaossion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.Gaossion.Font = new System.Drawing.Font("SimSun", 12F);
-            this.Gaossion.Location = new System.Drawing.Point(175, 451);
-            this.Gaossion.Margin = new System.Windows.Forms.Padding(4);
-            this.Gaossion.Name = "Gaossion";
-            this.Gaossion.Size = new System.Drawing.Size(112, 31);
-            this.Gaossion.TabIndex = 27;
-            this.Gaossion.Text = "高斯平滑";
-            this.Gaossion.UseVisualStyleBackColor = true;
-            this.Gaossion.Click += new System.EventHandler(this.Gaossion_Click);
+            this.reset.Font = new System.Drawing.Font("SimSun", 12F);
+            this.reset.Location = new System.Drawing.Point(188, 203);
+            this.reset.Margin = new System.Windows.Forms.Padding(4);
+            this.reset.Name = "reset";
+            this.reset.Size = new System.Drawing.Size(146, 32);
+            this.reset.TabIndex = 30;
+            this.reset.Text = "重设当前图片";
+            this.reset.UseVisualStyleBackColor = true;
+            this.reset.Click += new System.EventHandler(this.reset_Click);
             // 
-            // label4
+            // DOG
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(294, 456);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 20);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "高斯系数";
+            this.DOG.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.DOG.Font = new System.Drawing.Font("SimSun", 12F);
+            this.DOG.Location = new System.Drawing.Point(25, 490);
+            this.DOG.Margin = new System.Windows.Forms.Padding(4);
+            this.DOG.Name = "DOG";
+            this.DOG.Size = new System.Drawing.Size(138, 32);
+            this.DOG.TabIndex = 31;
+            this.DOG.Text = "DOG取异";
+            this.DOG.UseVisualStyleBackColor = true;
+            this.DOG.Click += new System.EventHandler(this.DOG_Click);
             // 
-            // GaossionCor
+            // textBox2
             // 
-            this.GaossionCor.Location = new System.Drawing.Point(397, 451);
-            this.GaossionCor.Name = "GaossionCor";
-            this.GaossionCor.Size = new System.Drawing.Size(77, 30);
-            this.GaossionCor.TabIndex = 29;
-            this.GaossionCor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GaossionCor_KeyPress);
+            this.textBox2.Location = new System.Drawing.Point(230, 490);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(77, 30);
+            this.textBox2.TabIndex = 32;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(368, 490);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(77, 30);
+            this.textBox3.TabIndex = 33;
+            // 
+            // G1
+            // 
+            this.G1.AutoSize = true;
+            this.G1.Location = new System.Drawing.Point(184, 496);
+            this.G1.Name = "G1";
+            this.G1.Size = new System.Drawing.Size(29, 20);
+            this.G1.TabIndex = 34;
+            this.G1.Text = "G1";
+            // 
+            // G2
+            // 
+            this.G2.AutoSize = true;
+            this.G2.Location = new System.Drawing.Point(326, 496);
+            this.G2.Name = "G2";
+            this.G2.Size = new System.Drawing.Size(29, 20);
+            this.G2.TabIndex = 35;
+            this.G2.Text = "G2";
             // 
             // Main
             // 
@@ -615,6 +683,12 @@
         private System.Windows.Forms.TextBox GaossionCor;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Gaossion;
+        private System.Windows.Forms.Button reset;
+        private System.Windows.Forms.Label G2;
+        private System.Windows.Forms.Label G1;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button DOG;
     }
 }
 

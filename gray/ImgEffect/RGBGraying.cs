@@ -264,6 +264,16 @@ namespace Gray
             return myMatrix;
         }
 
-        static public bool isGrayImage(Bitmap bitmap) => isGray(bitmap.GetPixel(new Random().Next(0, bitmap.Width), new Random().Next(0, bitmap.Height)));
+        static public bool isGrayImage(Bitmap bitmap)
+        {
+            byte[] imgArr = ImageHelper.GetImgArr(bitmap);
+            int len = imgArr.Length / 3;
+            for(int i = 0; i < len; i += 3)
+            {
+                if (!(imgArr[i] == imgArr[i + 1] && imgArr[i] == imgArr[i + 2]))
+                    return false;
+            }
+            return true;
+        }
     }
 }

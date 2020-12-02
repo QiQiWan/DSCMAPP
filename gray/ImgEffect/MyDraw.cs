@@ -4,7 +4,8 @@ namespace Gray
 {
     class imageCollection
     {
-        public Bitmap bitmap = null;
+        public Bitmap OriginBitmap = null;
+        public Bitmap GrayBitmap;
         public ImageCollectionMode mode;
         public string filePath = null;
         public int grayLevel;
@@ -14,29 +15,30 @@ namespace Gray
         }
         public imageCollection(Bitmap bitmap, string filePath, ImageCollectionMode mode)
         {
-            this.bitmap = bitmap;
+            this.OriginBitmap = bitmap;
             this.filePath = filePath;
             this.mode = mode;
             UpdateGray();
         }
         public imageCollection(string filePath, ImageCollectionMode mode)
         {
-            this.bitmap = new Bitmap(Image.FromFile(filePath));
+            this.OriginBitmap = new Bitmap(Image.FromFile(filePath));
             this.filePath = filePath;
             this.mode = mode;
             UpdateGray();
         }
         public void ChangeImage(string filePath)
         {
-            bitmap = new Bitmap(Image.FromFile(filePath));
-            bitmap = new Bitmap(Image.FromFile(filePath));
+            OriginBitmap = new Bitmap(Image.FromFile(filePath));
+            OriginBitmap = new Bitmap(Image.FromFile(filePath));
             this.filePath = filePath;
             UpdateGray();
         }
 
         public void UpdateGray()
         {
-            grayLevel = RGBGraying.GetAverageGrayLevel(bitmap);
+            this.GrayBitmap = RGBGraying.GetGrayImage(OriginBitmap);
+            grayLevel = RGBGraying.GetAverageGrayLevel(GrayBitmap);
         }
 
         public override string ToString()

@@ -1,0 +1,6 @@
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.csprojAssemblyReference.cache
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.exe.config
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.Main.resources
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.Properties.Resources.resources
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.csproj.GenerateResource.cache
+H:\study\C#实验\数字图像\gray\obj\Release\Gray.csproj.CoreCompileInputs.cache

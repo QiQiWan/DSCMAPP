@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using MyTools.MathModel;
+using Gray.Unit;
 
 namespace Gray
 {
@@ -14,7 +13,7 @@ namespace Gray
 
     //使用缓存,以减少重复计算
 
-    public partial class Main: Form
+    public partial class Main : Form
     {
         public Main()
         {
@@ -35,14 +34,39 @@ namespace Gray
         private imageCollection[] imageCollection = new imageCollection[2];//本窗口的两幅主图像,包括参考图像和变形图像
         private Bitmap RGBBitmap = null;//原始彩色图像
         private Bitmap GrayBitmap = null;//处理后的灰度图像
-        private Stopwatch stopwatch = new Stopwatch();
         private int index = -1;
+        private Bitmap CurrentBitmap = null;
         //private readonly object LOCK;//锁定线程
 
         //在多线程内使用控件委托
-        StatusBar.ChangeStatusDelegate changeStatus = new StatusBar.ChangeStatusDelegate(StatusBar.ChangeStatus);
-        StatusBar.UpDateProcessDelegate upDateProcess = new StatusBar.UpDateProcessDelegate(StatusBar.UpDateProcess);
-        StatusBar.SetTickTimeDelegate setTickTime = new StatusBar.SetTickTimeDelegate(StatusBar.SetTickTime);
+        public static StatusBar.ChangeStatusDelegate changeStatus = new StatusBar.ChangeStatusDelegate(StatusBar.ChangeStatus);
+        public static StatusBar.UpDateProcessDelegate upDateProcess = new StatusBar.UpDateProcessDelegate(StatusBar.UpDateProcess);
+        public static StatusBar.SetTickTimeDelegate setTickTime = new StatusBar.SetTickTimeDelegate(StatusBar.SetTickTime);
+
+        //初始化状态栏管理器
+
+        public void ChangeStatus(StatusBar.StatusMode mode)
+        {
+            switch (mode)
+            {
+                case StatusBar.StatusMode.doing:
+                    process.Text = "正在分析...";
+                    break;
+                case StatusBar.StatusMode.done:
+                    process.Text = "分析完成!";
+                    break;
+            }
+        }
+        private void UpDateProcess(int value)
+        {
+            progressBar.Value = value;
+        }
+        private void SetTickTime(double mill)
+        {
+            Shell.WriteLine($">>> 已用时: {mill} ms");
+            timeTick.Text = "已用时间: " + Math.Round(mill, 1) + "ms";
+        }
+
         #endregion
 
         private void Main_Load(object sender, EventArgs e)
@@ -59,7 +83,7 @@ namespace Gray
         {
             index = imageCol.Items.IndexOf(imageCol.SelectedItem);
             StatusBar.ChangeStatus(process);
-            if (imageCollection[index].bitmap == null)
+            if (imageCollection[index].OriginBitmap == null)
             {
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 OpenFileDialog dialog = new OpenFileDialog();
@@ -129,11 +153,13 @@ namespace Gray
         }
         private void ChangeCurrentImage(imageCollection imageCollection)
         {
-            RGBBitmap = imageCollection.bitmap;
-            GrayBitmap = null;
+            RGBBitmap = imageCollection.OriginBitmap;
+            GrayBitmap = imageCollection.GrayBitmap;
+
             fileNameBox.Text = imageCollection.filePath;
             orginBitmap = null;
-            DisplayImage(previewBox, imageCollection.bitmap);
+            CurrentBitmap = imageCollection.OriginBitmap;
+            DisplayImage(previewBox, imageCollection.OriginBitmap);
         }
         private void DisplayImage(PictureBox pictureBox, Bitmap bitmap)
         {
@@ -148,7 +174,6 @@ namespace Gray
         private void ChangePicBox()
         {
             StatusBar.SetGrayLevel(average, imageCollection[index].grayLevel);
-
         }
         #endregion
 
@@ -159,22 +184,8 @@ namespace Gray
                 Shell.WriteLine("### 未选择图片, 操作中止!");
                 return;
             }
-
-            Shell.WriteLine(">>> 正在灰度中...");
-            StatusBar.ChangeStatus(process);
-
-            stopwatch.Start();
-            DisplayImage(previewBox, RGBGraying.GetGrayImage(new Bitmap(RGBBitmap)));
-            GrayBitmap = new Bitmap(previewBox.Image);//更新灰度图片
-            stopwatch.Stop();
-
-            StatusBar.SetTickTime(timeTick, stopwatch.Elapsed.TotalMilliseconds);
-            stopwatch.Reset();
-
-            StatusBar.ChangeStatus(process);
-            Shell.WriteLine(">>> 灰度完成!");
-            Shell.WriteLine(Shell.PreDefineSearchRAM());
-
+            if(GrayBitmap != null)
+                DisplayImage(previewBox, GrayBitmap);
             GC.Collect();
         }
 
@@ -197,18 +208,11 @@ namespace Gray
             }
             int level = int.Parse(textBox1.Text);
 
-            Shell.WriteLine(">>> 正在二值化...");
-            StatusBar.ChangeStatus(process);
-            stopwatch.Start();
+            //StripBarMannager.Start(">>> 正在二值化...");
 
             DisplayImage(previewBox, RGBGraying.Get2BWImage(GrayBitmap, level));
 
-            stopwatch.Stop();
-            StatusBar.SetTickTime(timeTick, stopwatch.Elapsed.TotalMilliseconds);
-            stopwatch.Reset();
-
-            StatusBar.ChangeStatus(process);
-            Shell.WriteLine(">>> 二值化完成");
+            //StripBarMannager.Stop();
             GC.Collect();
         }
 
@@ -402,12 +406,12 @@ namespace Gray
                 if ((e.KeyChar < '0') || (e.KeyChar > '9'))
                     e.Handled = true;
         }
-        private void GaossionCor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar != '\b')
-                if ((e.KeyChar < '0') || (e.KeyChar > '9'))
-                    e.Handled = true;
-        }
+        //private void GaossionCor_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar != '\b')
+        //        if ((e.KeyChar < '0') || (e.KeyChar > '9'))
+        //            e.Handled = true;
+        //}
         #endregion
         private void EstablishCoordinate_Click(object sender, EventArgs e)
         {
@@ -436,18 +440,79 @@ namespace Gray
 
         private void Gaossion_Click(object sender, EventArgs e)
         {
-            Bitmap bitmap = orginBitmap;
-            if (!RGBGraying.isGrayImage(bitmap))
-                throw new Exception("图片不是灰度图片!");
+            StatusBar.ChangeStatus(process);
+            if(GrayBitmap == null)
+            {
+                Shell.WriteLine("需要更新灰度图片!");
+            }
+
+            Bitmap bitmap = GrayBitmap;
             byte[] bitmapBuff = ImageHelper.GetImgArr(bitmap);
 
             double σ;
             if (!Double.TryParse(GaossionCor.Text, out σ))
                 σ = 1;
             int width = bitmap.Width, height = bitmap.Height;
-            bitmapBuff = ImageAnalyse.IntMatrix2Bytes(ImageAnalyse.GaussionBlur(ImageAnalyse.Bytes2IntMatrix(bitmapBuff, width, height), σ));
+
+            // StripBarMannager.Start("正在计算高斯滤波...");
+
+            int[][] bitmapMatrix = ImageAnalyse.Bytes2IntMatrix(bitmapBuff, width, height);
+            int[][] AimMatrix = ImageAnalyse.GaussionBlur(bitmapMatrix, σ);
+            // UnitHelper.PrintMatrix(bitmapMatrix, AimMatrix);
+
+            bitmapBuff = ImageAnalyse.IntMatrix2Bytes(AimMatrix);
             bitmap = ImageHelper.WriteImg(bitmapBuff, width, height);
             DisplayImage(previewBox, bitmap);
+
+            //StripBarMannager.Stop();
+
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            if (CurrentBitmap == null)
+                return;
+            DisplayImage(previewBox, CurrentBitmap);
+        }
+
+        private void DOG_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(previewBox.Image);
+            if (bitmap == null)
+                return;
+            if (!RGBGraying.isGrayImage(bitmap))
+                return;
+
+            int width = bitmap.Width, height = bitmap.Height;
+            double GC1, GC2;
+
+            if (Double.TryParse(G1.Text, out GC1))
+                GC1 = 1;
+            if (Double.TryParse(G2.Text, out GC2))
+                GC2 = 10;
+
+            //StripBarMannager.Start("正在计算高斯滤波...");
+
+            byte[] bitmapBuff = ImageHelper.GetImgArr(bitmap);
+            int[][] bitmapMatrix = ImageAnalyse.Bytes2IntMatrix(bitmapBuff, width, height);
+
+            int[][] GaussionM1 = ImageAnalyse.GaussionBlur(bitmapMatrix, GC1);
+            int[][] GaussionM2 = ImageAnalyse.GaussionBlur(bitmapMatrix, GC2);
+
+            int[][] DOGMatrix = ImageAnalyse.InitMatrix<int>(width, height);
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    DOGMatrix[i][j] = Math.Abs(GaussionM1[i][j] - GaussionM2[i][j]);
+                }
+            }
+            bitmapBuff = ImageAnalyse.IntMatrix2Bytes(bitmapMatrix);
+            bitmap = ImageHelper.WriteImg(bitmapBuff, width, height);
+            DisplayImage(previewBox, bitmap);
+
+            //StripBarMannager.Stop();
         }
     }
 }

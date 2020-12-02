@@ -1,7 +1,7 @@
-﻿using System;
-using System.Drawing;
-using MyTools;
+﻿using MyTools;
 using MyTools.OpenProperties;
+using System;
+using System.Drawing;
 
 namespace Gray
 {
@@ -11,7 +11,7 @@ namespace Gray
         private MyMatrix myMatrix;
 
         // 保存散斑列表
-        private Speckle[] speckles;
+        private Speckle[] Speckles;
 
         public SpeckleSearch(MyMatrix myMatrix)
         {

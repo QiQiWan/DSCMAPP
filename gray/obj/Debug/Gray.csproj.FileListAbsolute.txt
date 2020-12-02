@@ -27,3 +27,16 @@ H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.GenerateResource.cache
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.CoreCompileInputs.cache
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.pdb
+H:\study\C#实验\数字图像\gray\bin\Debug\Gray.exe.config
+H:\study\C#实验\数字图像\gray\bin\Debug\Gray.exe
+H:\study\C#实验\数字图像\gray\bin\Debug\Gray.pdb
+H:\study\C#实验\数字图像\gray\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\MyTools.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\TencentCloud.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\Newtonsoft.Json.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\Pathoschild.Http.Client.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\System.Net.Http.Formatting.dll
+H:\study\C#实验\数字图像\gray\bin\Debug\MyTools.pdb
+H:\study\C#实验\数字图像\gray\bin\Debug\MyTools.dll.config
+H:\study\C#实验\数字图像\gray\bin\Debug\TencentCloud.pdb
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.CopyComplete

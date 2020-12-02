@@ -9,7 +9,7 @@ namespace Gray
     //全局变量类型
     class Common
     {
-        //进程锁
+        //线程锁
         public static object Lock = new object();
     }
 }
