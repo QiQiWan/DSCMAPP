@@ -2,25 +2,24 @@
 
 namespace Gray
 {
-    class imageCollection
+    class ImageCollection
     {
         public Bitmap OriginBitmap = null;
         public Bitmap GrayBitmap;
         public ImageCollectionMode mode;
         public string filePath = null;
         public int grayLevel;
-
-        public imageCollection()
+        public ImageCollection()
         {
         }
-        public imageCollection(Bitmap bitmap, string filePath, ImageCollectionMode mode)
+        public ImageCollection(Bitmap bitmap, string filePath, ImageCollectionMode mode)
         {
             this.OriginBitmap = bitmap;
             this.filePath = filePath;
             this.mode = mode;
             UpdateGray();
         }
-        public imageCollection(string filePath, ImageCollectionMode mode)
+        public ImageCollection(string filePath, ImageCollectionMode mode)
         {
             this.OriginBitmap = new Bitmap(Image.FromFile(filePath));
             this.filePath = filePath;

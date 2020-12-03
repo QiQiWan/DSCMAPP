@@ -11,15 +11,15 @@ namespace Gray
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        static public double[][] GetGrayMatrix(Bitmap bitmap)
+        static public int[][] GetGrayMatrix(Bitmap bitmap)
         {
             byte[] rgbValues = GetImgArr(bitmap);
-            double[][] matrix = new double[bitmap.Height][];
+            int[][] matrix = new int[bitmap.Height][];
 
             int position = 0;
             for (int i = 0; i < bitmap.Height; i++)
             {
-                double[] temp = new double[bitmap.Width];
+                int[] temp = new int[bitmap.Width];
                 for (int j = 0; j < bitmap.Width; j++)
                 {
                     temp[j] = rgbValues[position];

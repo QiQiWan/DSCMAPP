@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Gray
@@ -184,6 +185,8 @@ namespace Gray
 
     public class ImageAnalyse
     {
+        public static ConvolutionType convolutionType;
+        public static GausiionKernelSelector gausiionKernelSelector;
         /// <summary>
         /// 计算积分图
         /// </summary>
@@ -259,20 +262,49 @@ namespace Gray
             int maxIntager = MaxIntager(σ);
             int SideLength = 2 * maxIntager + 1;
 
-            ConvolutionType convolutionType = new ConvolutionType(SideLength, SideLength, maxIntager, maxIntager, σ);
-            GausiionKernelSelector gausiionKernelSelector = new GausiionKernelSelector(convolutionType);
+            if(maxIntager >= width - 1 || maxIntager >= height -1)
+            {
+                Shell.WriteLine("### 标准差过大,操作中止!!!");
+                return bitmap;
+            }
 
-            int[][] temp;
+            convolutionType = new ConvolutionType(SideLength, SideLength, maxIntager, maxIntager, σ);
+            gausiionKernelSelector = new GausiionKernelSelector(convolutionType);
+
+
             for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                Parallel.For(0, height, j =>
                 {
+                    GBitmap[j][i] = gausiionKernelSelector.GausiionSmoothingCrossShape(bitmap, i, j, width, height, maxIntager);
+                });
+            }
+
+            //MethodCaller mc = new MethodCaller(CalGauMatrix);
+            //IAsyncResult result = mc.BeginInvoke(bitmap, maxIntager, SideLength, new Size(width, height, null, null));
+            //GBitmap = mc.EndInvoke(result);
+
+            return GBitmap;
+        }
+
+        public delegate int[][] MethodCaller(int[][] bitmap, int maxIntager, int SideLength, Size size);
+
+        private static int[][] CalGauMatrix(int[][] bitmap, int maxIntager, int SideLength, Size size)
+        {
+            int[][] GBitmap = InitMatrix<int>(SideLength, SideLength);
+            int width = size.Width, height = size.Height;
+            for (int i = 0; i < width; i++)
+            {
+                Parallel.For(0, height, j =>
+                {
+                    int[][] temp;
                     temp = CreateImgMatrix(bitmap, new Point(i, j), maxIntager);
-                    GBitmap[j][i] = gausiionKernelSelector.GausiionSmoothing(temp, SideLength, SideLength);
-                }
+                    //GBitmap[j][i] = gausiionKernelSelector.GausiionSmoothing(temp, SideLength, SideLength);
+                });
             }
             return GBitmap;
         }
+
         /// <summary>
         /// 边界调整,若值超出边界则取关于边界对称
         /// </summary>
@@ -315,10 +347,28 @@ namespace Gray
             }
             return matrix;
         }
+        /// <summary>
+        /// 大于计算三倍标准差的最小整数
+        /// </summary>
+        /// <param name="σ"></param>
+        /// <returns></returns>
         public static int MaxIntager(double σ)
         {
+            //int temp = (int)(3 * σ);
+            //if (temp >= 10)
+            //    return 10;
+            if ((int)σ - σ == 0)
+                return (int)(3 * σ);
             return (int)(3 * σ) + 1;
         }
+
+        /// <summary>
+        /// 初始化指定尺寸的全零矩阵
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static T[][] InitMatrix<T>(int width, int height)
         {
             T[][] matrix = new T[height][];
@@ -349,6 +399,12 @@ namespace Gray
             return DMatrix;
         }
 
+        public static Size GetImgSize(int[][] bitmap)
+        {
+            int width = bitmap[0].Length, height = bitmap.Length;
+            return new Size(width, height);
+        }
+
         public static Size CompareImageSize(int[][] p1, int[][] p2)
         {
             int w1 = p1[0].Length, h1 = p1.Length;
@@ -372,6 +428,34 @@ namespace Gray
         public Size()
         {
             this.IsNull = true;
+        }
+        public int GetMinSize()
+        {
+            return Width > Height ? Height : Width;
+        }
+        public static bool operator ==(Size s1, Size s2)
+        {
+            if (s1.Width == s2.Width && s1.Height == s2.Height)
+                return true;
+            return false;
+        }
+        public static bool operator !=(Size s1, Size s2)
+        {
+            if (s1 == s2)
+                return false;
+            return true;
+        }
+        public override bool Equals(object s)
+        {
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return $"{Width}*{Height}";
         }
     }
 }

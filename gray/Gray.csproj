@@ -65,6 +65,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ImgEffect\GausiionKernelSelector.cs" />
+    <Compile Include="ImgEffect\GaussPyramid.cs" />
     <Compile Include="ImgEffect\Helper\Common.cs" />
     <Compile Include="ImgEffect\Helper\FileHelper.cs" />
     <Compile Include="ImgEffect\Helper\ImageHelper.cs" />

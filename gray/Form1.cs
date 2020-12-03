@@ -31,11 +31,13 @@ namespace Gray
         /// <summary>
         /// 在此对变量进行注解
         /// </summary>
-        private imageCollection[] imageCollection = new imageCollection[2];//本窗口的两幅主图像,包括参考图像和变形图像
+        private ImageCollection[] imageCollection = new ImageCollection[2];//本窗口的两幅主图像,包括参考图像和变形图像
         private Bitmap RGBBitmap = null;//原始彩色图像
         private Bitmap GrayBitmap = null;//处理后的灰度图像
         private int index = -1;
         private Bitmap CurrentBitmap = null;
+        private GaussPyramid[] GaussPyramids = new GaussPyramid[2];
+
         //private readonly object LOCK;//锁定线程
 
         //在多线程内使用控件委托
@@ -71,8 +73,8 @@ namespace Gray
 
         private void Main_Load(object sender, EventArgs e)
         {
-            imageCollection[0] = new imageCollection();
-            imageCollection[1] = new imageCollection();
+            imageCollection[0] = new ImageCollection();
+            imageCollection[1] = new ImageCollection();
             imageCollection[0].mode = ImageCollectionMode.Orgin;
             imageCollection[1].mode = ImageCollectionMode.Deformation;
             imageCol.Items.AddRange(imageCollection);
@@ -91,7 +93,7 @@ namespace Gray
                 dialog.Filter = "图像文件|*.jpg;*.jpeg;*.png;*.bmp;";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    imageCollection[index] = new imageCollection(dialog.FileName, index == 0 ? ImageCollectionMode.Orgin : ImageCollectionMode.Deformation);
+                    imageCollection[index] = new ImageCollection(dialog.FileName, index == 0 ? ImageCollectionMode.Orgin : ImageCollectionMode.Deformation);
                     dialog.Dispose();
                 }
                 else
@@ -151,11 +153,11 @@ namespace Gray
 
             ChangePicBox();
         }
-        private void ChangeCurrentImage(imageCollection imageCollection)
+        private void ChangeCurrentImage(ImageCollection imageCollection)
         {
             RGBBitmap = imageCollection.OriginBitmap;
             GrayBitmap = imageCollection.GrayBitmap;
-
+            GaussPyramids[index] = new GaussPyramid(imageCollection);
             fileNameBox.Text = imageCollection.filePath;
             orginBitmap = null;
             CurrentBitmap = imageCollection.OriginBitmap;

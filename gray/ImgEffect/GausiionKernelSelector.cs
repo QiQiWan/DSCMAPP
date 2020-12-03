@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Gray.ImgEffect
 {
-    class GausiionKernelSelector
+    public class GausiionKernelSelector
     {
         /// <summary>
         /// 滤波器的卷积核
@@ -66,7 +66,34 @@ namespace Gray.ImgEffect
             return sum / Sum;
         }
         /// <summary>
-        /// 十字形高斯卷积平滑方法,其中x,y是十字中心位置
+        /// 使用高斯卷积核对分块进行平滑,矩形平滑,需要子方块
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="maxIntager"></param>
+        /// <returns></returns>
+        public int GausiionSmoothing(int[][] bitmap, int x, int y, int width, int height, int maxIntager)
+        {
+            int sum = 0, Kwidth = Kernel.Width, Kheight = Kernel.Height;
+            int Px, Py;
+            for(int i = 0; i < Kheight; i++)
+            {
+                for(int j = 0; j < Kwidth; j++)
+                {
+                    Px = x - maxIntager + j;
+                    Px = BorderAdjust(Px, 0, width - 1);
+                    Py = y - maxIntager + i;
+                    Py = BorderAdjust(Py, 0, height - 1);
+                    sum += bitmap[Py][Px] * Kernel.Kernel[i][j];
+                }
+            }
+            return sum / Sum;
+        }
+        /// <summary>
+        /// 十字形高斯卷积平滑方法,其中x,y是十字中心位置,该方法需要传入分割好的小方块
         /// </summary>
         /// <param name="bitmapM"></param>
         /// <param name="x"></param>
@@ -77,19 +104,76 @@ namespace Gray.ImgEffect
         public int GausiionSmoothingCrossShape(int[][] bitmapM, int x, int y, int width, int height)
         {
             int sum = 0;
+            int CrossSum = 0;
             int[][] kernel = Kernel.Kernel;
             for (int i = 0; i < height; i++)
             {
                 if (i != y)
+                {
                     sum += bitmapM[x][i] * kernel[x][i];
+                    CrossSum += kernel[x][i];
+                }
             }
             for (int j = 0; j < width; j++)
             {
                 if (j != x)
+                {
                     sum += bitmapM[j][y] * kernel[j][y];
+                    CrossSum += kernel[j][y];
+                }
             }
             sum += bitmapM[x][y] * kernel[x][y];
-            return sum / Sum;
+            CrossSum += kernel[x][y];
+            return sum / CrossSum;
+        }
+        /// <summary>
+        /// 十字形高斯卷积平滑方法,其中x,y是十字中心位置,该方法不需要传入分割好的小方块
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="maxIntager"></param>
+        /// <returns></returns>
+        public int GausiionSmoothingCrossShape(int[][] bitmap, int x, int y, int width, int height, int maxIntager)
+        {
+            int sum = 0, CrossSum = 0;
+            int[][] kernel = Kernel.Kernel;
+            int Kwidth = Kernel.Width, Kheight = Kernel.Height;
+            int Px, Py;
+            for (int i = 0; i < Kheight; i++)
+            {
+                Py = y - maxIntager + i;
+                Py = BorderAdjust(Py, 0, height - 1);
+                if(Py != y)
+                {
+                    sum += bitmap[Py][x] * kernel[i][maxIntager];
+                    CrossSum += kernel[i][maxIntager];
+                }
+            }
+            for(int j = 0; j < Kwidth; j++)
+            {
+                Px = x - maxIntager + j;
+                Px = BorderAdjust(Px, 0, width - 1);
+                if(Px != x)
+                {
+                    sum += bitmap[y][Px] * kernel[maxIntager][j];
+                    CrossSum += kernel[maxIntager][j];
+                }
+            }
+            sum += bitmap[y][x] * kernel[maxIntager][maxIntager];
+            CrossSum += kernel[maxIntager][maxIntager];
+            return sum / CrossSum;
+        }
+
+        private int BorderAdjust(int n, int lBorder, int uborder)
+        {
+            if (n < lBorder)
+                return 2 * lBorder - n;
+            if (n > uborder)
+                return 2 * uborder - n;
+            return n;
         }
     }
     public delegate double CustomKernel(int x, int y, double σ);
