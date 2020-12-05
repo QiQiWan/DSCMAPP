@@ -98,5 +98,23 @@ namespace Gray
             bitmap.UnlockBits(bitmapData);
             return bitmap;
         }
+        static public Bitmap WriteGrayImg(int[][] grayMatrix, int width, int height)
+        {
+            byte[] rgbValues = new byte[width * height * 3];
+            int position = 0;
+            for(int i = 0; i < height; i++)
+            {
+                for(int j = 0; j < width; j++)
+                {
+                    rgbValues[position] = rgbValues[position + 1] = rgbValues[position + 2] = Convert.ToByte(grayMatrix[i][j]);
+                    position += 3;
+                }
+            }
+            return WriteImg(rgbValues, width, height);
+        }
+        static public Bitmap WriteGrayImg(int[][] grayMatrix, Size size)
+        {
+            return WriteGrayImg(grayMatrix, size.Width, size.Height);
+        }
     }
 }

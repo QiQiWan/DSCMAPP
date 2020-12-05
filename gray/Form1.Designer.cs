@@ -34,6 +34,8 @@
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.graying = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.DOGFind = new System.Windows.Forms.Button();
+            this.reset = new System.Windows.Forms.Button();
             this.GaossionCor = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.Gaossion = new System.Windows.Forms.Button();
@@ -76,12 +78,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.reset = new System.Windows.Forms.Button();
-            this.DOG = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.G1 = new System.Windows.Forms.Label();
-            this.G2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.peaklevel = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -138,11 +136,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.G2);
-            this.groupBox1.Controls.Add(this.G1);
-            this.groupBox1.Controls.Add(this.textBox3);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.DOG);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.DOGFind);
+            this.groupBox1.Controls.Add(this.peaklevel);
             this.groupBox1.Controls.Add(this.reset);
             this.groupBox1.Controls.Add(this.GaossionCor);
             this.groupBox1.Controls.Add(this.label4);
@@ -177,6 +173,31 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "工作空间";
+            // 
+            // DOGFind
+            // 
+            this.DOGFind.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.DOGFind.Font = new System.Drawing.Font("SimSun", 12F);
+            this.DOGFind.Location = new System.Drawing.Point(336, 488);
+            this.DOGFind.Margin = new System.Windows.Forms.Padding(4);
+            this.DOGFind.Name = "DOGFind";
+            this.DOGFind.Size = new System.Drawing.Size(138, 32);
+            this.DOGFind.TabIndex = 31;
+            this.DOGFind.Text = "极值点查找";
+            this.DOGFind.UseVisualStyleBackColor = true;
+            this.DOGFind.Click += new System.EventHandler(this.DOG_Click);
+            // 
+            // reset
+            // 
+            this.reset.Font = new System.Drawing.Font("SimSun", 12F);
+            this.reset.Location = new System.Drawing.Point(188, 203);
+            this.reset.Margin = new System.Windows.Forms.Padding(4);
+            this.reset.Name = "reset";
+            this.reset.Size = new System.Drawing.Size(146, 32);
+            this.reset.TabIndex = 30;
+            this.reset.Text = "重设当前图片";
+            this.reset.UseVisualStyleBackColor = true;
+            this.reset.Click += new System.EventHandler(this.reset_Click);
             // 
             // GaossionCor
             // 
@@ -545,62 +566,21 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // reset
+            // label5
             // 
-            this.reset.Font = new System.Drawing.Font("SimSun", 12F);
-            this.reset.Location = new System.Drawing.Point(188, 203);
-            this.reset.Margin = new System.Windows.Forms.Padding(4);
-            this.reset.Name = "reset";
-            this.reset.Size = new System.Drawing.Size(146, 32);
-            this.reset.TabIndex = 30;
-            this.reset.Text = "重设当前图片";
-            this.reset.UseVisualStyleBackColor = true;
-            this.reset.Click += new System.EventHandler(this.reset_Click);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(137, 494);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(109, 20);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "极值点阈值";
             // 
-            // DOG
+            // peaklevel
             // 
-            this.DOG.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.DOG.Font = new System.Drawing.Font("SimSun", 12F);
-            this.DOG.Location = new System.Drawing.Point(25, 490);
-            this.DOG.Margin = new System.Windows.Forms.Padding(4);
-            this.DOG.Name = "DOG";
-            this.DOG.Size = new System.Drawing.Size(138, 32);
-            this.DOG.TabIndex = 31;
-            this.DOG.Text = "DOG取异";
-            this.DOG.UseVisualStyleBackColor = true;
-            this.DOG.Click += new System.EventHandler(this.DOG_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(230, 490);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(77, 30);
-            this.textBox2.TabIndex = 32;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(368, 490);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(77, 30);
-            this.textBox3.TabIndex = 33;
-            // 
-            // G1
-            // 
-            this.G1.AutoSize = true;
-            this.G1.Location = new System.Drawing.Point(184, 496);
-            this.G1.Name = "G1";
-            this.G1.Size = new System.Drawing.Size(29, 20);
-            this.G1.TabIndex = 34;
-            this.G1.Text = "G1";
-            // 
-            // G2
-            // 
-            this.G2.AutoSize = true;
-            this.G2.Location = new System.Drawing.Point(326, 496);
-            this.G2.Name = "G2";
-            this.G2.Size = new System.Drawing.Size(29, 20);
-            this.G2.TabIndex = 35;
-            this.G2.Text = "G2";
+            this.peaklevel.Location = new System.Drawing.Point(252, 488);
+            this.peaklevel.Name = "peaklevel";
+            this.peaklevel.Size = new System.Drawing.Size(77, 30);
+            this.peaklevel.TabIndex = 15;
             // 
             // Main
             // 
@@ -684,11 +664,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Gaossion;
         private System.Windows.Forms.Button reset;
-        private System.Windows.Forms.Label G2;
-        private System.Windows.Forms.Label G1;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button DOG;
+        private System.Windows.Forms.Button DOGFind;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox peaklevel;
     }
 }
 

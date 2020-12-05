@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gray.ImgEffect;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Gray.Unit;
@@ -75,6 +76,8 @@ namespace Gray
         {
             imageCollection[0] = new ImageCollection();
             imageCollection[1] = new ImageCollection();
+            GaussPyramids[0] = new GaussPyramid(imageCollection[0]);
+            GaussPyramids[1] = new GaussPyramid(imageCollection[1]);
             imageCollection[0].mode = ImageCollectionMode.Orgin;
             imageCollection[1].mode = ImageCollectionMode.Deformation;
             imageCol.Items.AddRange(imageCollection);
@@ -142,22 +145,23 @@ namespace Gray
             StatusBar.ChangeStatus(process, StatusBar.StatusMode.doing);
 
             Shell.WriteLine(">>> 已选择文件: " + fileNameBox.Text);
-            imageCollection[index].ChangeImage(fileNameBox.Text);
-
+            imageCollection[index] = new ImageCollection(fileNameBox.Text, imageCollection[index].mode);
             ChangeCurrentImage(imageCollection[index]);
             GC.Collect();
 
             Shell.WriteLine(Shell.PreDefineSearchRAM());
 
             StatusBar.ChangeStatus(process, StatusBar.StatusMode.done);
-
+            
             ChangePicBox();
         }
         private void ChangeCurrentImage(ImageCollection imageCollection)
         {
             RGBBitmap = imageCollection.OriginBitmap;
             GrayBitmap = imageCollection.GrayBitmap;
-            GaussPyramids[index] = new GaussPyramid(imageCollection);
+
+            if (GaussPyramids[index].ImageColl != imageCollection)
+                GaussPyramids[index] = new GaussPyramid(imageCollection);
             fileNameBox.Text = imageCollection.filePath;
             orginBitmap = null;
             CurrentBitmap = imageCollection.OriginBitmap;
@@ -186,7 +190,7 @@ namespace Gray
                 Shell.WriteLine("### 未选择图片, 操作中止!");
                 return;
             }
-            if(GrayBitmap != null)
+            if (GrayBitmap != null)
                 DisplayImage(previewBox, GrayBitmap);
             GC.Collect();
         }
@@ -247,7 +251,7 @@ namespace Gray
                         Shell.WriteLine("### 定位超限!");
                         return;
                     }
-                    g.DrawRectangle(new Pen(Color.Green, 2), x, y, width, height);
+                    g.DrawRectangle(new Pen(Color.Red, 2), x, y, width, height);
                     DisplayImage(previewBox, new Bitmap(TempImage));
                 }
             }
@@ -256,7 +260,7 @@ namespace Gray
         #region 自由绘制
         private static bool freeDraw = false;
         private static bool drawing = false;
-        private static Point P1 = new Point();
+        private static System.Drawing.Point P1 = new System.Drawing.Point();
         private static Bitmap orginBitmap = null;
         private void FreeDraw_Click(object sender, EventArgs e)
         {
@@ -285,7 +289,7 @@ namespace Gray
             if (!freeDraw)
                 return;
             drawing = true;
-            P1 = new Point(e.X, e.Y);
+            P1 = new System.Drawing.Point(e.X, e.Y);
         }
         private void PreviewBox_MouseUp(object sender, MouseEventArgs e)
         {
@@ -311,12 +315,12 @@ namespace Gray
                         float heightPer = (float)tempImage.Height / (float)previewBox.Height;
                         float widthInsert = 1 / widthPer;
                         float heightInsert = 1 / heightPer;
-                        Point currentPoint = new Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
+                        System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
                         P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
                         P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        g.DrawLine(new Pen(Color.Green, 2), P1, currentPoint);
-                        P1 = new Point(e.X, e.Y);
+                        g.DrawLine(new Pen(Color.Red, 2), P1, currentPoint);
+                        P1 = new System.Drawing.Point(e.X, e.Y);
                         DisplayImage(previewBox, new Bitmap(tempImage));
                         SetMousePosition(e.X, e.Y);
                     }
@@ -430,7 +434,7 @@ namespace Gray
 
         private void Average2BW_Click(object sender, EventArgs e)
         {
-            Bitmap bitmap = new Bitmap(previewBox.Image);
+            Bitmap bitmap = new Bitmap(GrayBitmap);
             bitmap = RGBGraying.GetAve2BWImage(bitmap);
             DisplayImage(previewBox, bitmap);
         }
@@ -443,7 +447,7 @@ namespace Gray
         private void Gaossion_Click(object sender, EventArgs e)
         {
             StatusBar.ChangeStatus(process);
-            if(GrayBitmap == null)
+            if (GrayBitmap == null)
             {
                 Shell.WriteLine("需要更新灰度图片!");
             }
@@ -479,41 +483,27 @@ namespace Gray
 
         private void DOG_Click(object sender, EventArgs e)
         {
-            Bitmap bitmap = new Bitmap(previewBox.Image);
-            if (bitmap == null)
-                return;
-            if (!RGBGraying.isGrayImage(bitmap))
+            if (GrayBitmap == null)
                 return;
 
-            int width = bitmap.Width, height = bitmap.Height;
-            double GC1, GC2;
+            SamplingGroup sampling = GaussPyramids[index].SamplingGroups[0];
 
-            if (Double.TryParse(G1.Text, out GC1))
-                GC1 = 1;
-            if (Double.TryParse(G2.Text, out GC2))
-                GC2 = 10;
+            GaussPyramids[index].FindExtremePoint(sampling);
 
-            //StripBarMannager.Start("正在计算高斯滤波...");
+            Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
+            Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
 
-            byte[] bitmapBuff = ImageHelper.GetImgArr(bitmap);
-            int[][] bitmapMatrix = ImageAnalyse.Bytes2IntMatrix(bitmapBuff, width, height);
+            //double level = double.Parse(peaklevel.Text);
+            //Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].DOGScale[1], level);
 
-            int[][] GaussionM1 = ImageAnalyse.GaussionBlur(bitmapMatrix, GC1);
-            int[][] GaussionM2 = ImageAnalyse.GaussionBlur(bitmapMatrix, GC2);
+            DisplayImage(previewBox, B2Img);
 
-            int[][] DOGMatrix = ImageAnalyse.InitMatrix<int>(width, height);
 
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    DOGMatrix[i][j] = Math.Abs(GaussionM1[i][j] - GaussionM2[i][j]);
-                }
-            }
-            bitmapBuff = ImageAnalyse.IntMatrix2Bytes(bitmapMatrix);
-            bitmap = ImageHelper.WriteImg(bitmapBuff, width, height);
-            DisplayImage(previewBox, bitmap);
+            // 输出差分矩阵和极值点列表
+            UnitHelper.OutputDogImg(GaussPyramids[index].DOGScale[0]);
+            UnitHelper.OutputExtremPoints(GaussPyramids[index].ExtremePoints);
 
+            Console.WriteLine("计算完成!");
             //StripBarMannager.Stop();
         }
     }

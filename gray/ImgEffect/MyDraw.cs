@@ -2,7 +2,7 @@
 
 namespace Gray
 {
-    class ImageCollection
+    class ImageCollection : object
     {
         public Bitmap OriginBitmap = null;
         public Bitmap GrayBitmap;
@@ -29,7 +29,6 @@ namespace Gray
         public void ChangeImage(string filePath)
         {
             OriginBitmap = new Bitmap(Image.FromFile(filePath));
-            OriginBitmap = new Bitmap(Image.FromFile(filePath));
             this.filePath = filePath;
             UpdateGray();
         }
@@ -37,6 +36,7 @@ namespace Gray
         public void UpdateGray()
         {
             this.GrayBitmap = RGBGraying.GetGrayImage(OriginBitmap);
+            // GrayBitmap = ImageAnalyse.GaussionBlur(GrayBitmap, 0.5);
             grayLevel = RGBGraying.GetAverageGrayLevel(GrayBitmap);
         }
 
@@ -47,6 +47,26 @@ namespace Gray
             if (mode == ImageCollectionMode.Deformation)
                 return "变形图片";
             return "未定义";
+        }
+        public static bool operator ==(ImageCollection c1, ImageCollection c2)
+        {
+            if (c1.filePath == c2.filePath)
+                return true;
+            return false;
+        }
+        public static bool operator !=(ImageCollection c1, ImageCollection c2)
+        {
+            if (c1 == c2)
+                return false;
+            return true;
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
     public enum ImageCollectionMode { Orgin, Deformation };

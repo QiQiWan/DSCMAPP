@@ -86,6 +86,27 @@ namespace Gray
                 }
             }
         }
+        public static void WriteFile(string filePath, string[] contents, WriteMode mode)
+        {
+            if (!File.Exists(filePath))
+                CreatFile(filePath);
+            lock (Common.Lock)
+            {
+                using (fileStream = new FileStream(filePath, FileMode.Open))
+                {
+                    //文件指针定位到文件尾部
+                    if (mode == WriteMode.Append)
+                        fileStream.Position = fileStream.Length;
+                    streamWriter = new StreamWriter(fileStream);
+                    for (int i = 0; i < contents.Length; i++)
+                    {
+                        streamWriter.WriteLine(contents[i]);
+                    }
+                    streamWriter.Close();
+                    fileStream.Close();
+                }
+            }
+        }
         /// <summary>
         /// 判断文件是否存在
         /// </summary>

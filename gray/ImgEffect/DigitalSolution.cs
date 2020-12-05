@@ -1,5 +1,4 @@
-﻿using Gray.ImgEffect;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -185,8 +184,6 @@ namespace Gray
 
     public class ImageAnalyse
     {
-        public static ConvolutionType convolutionType;
-        public static GausiionKernelSelector gausiionKernelSelector;
         /// <summary>
         /// 计算积分图
         /// </summary>
@@ -250,7 +247,7 @@ namespace Gray
             return bitmapBytes;
         }
         /// <summary>
-        /// 将整幅图片进行 3 * 3 的高斯滤波
+        /// 将整幅图片进行空间尺度为σ的高斯滤波
         /// </summary>
         /// <param name="bitmap"></param>
         /// <param name="σ">高斯模糊系数</param>
@@ -262,15 +259,15 @@ namespace Gray
             int maxIntager = MaxIntager(σ);
             int SideLength = 2 * maxIntager + 1;
 
-            if(maxIntager >= width - 1 || maxIntager >= height -1)
+            if (maxIntager >= width - 1 || maxIntager >= height - 1)
             {
                 Shell.WriteLine("### 标准差过大,操作中止!!!");
                 return bitmap;
             }
-
+            ConvolutionType convolutionType;
+            GausiionKernelSelector gausiionKernelSelector;
             convolutionType = new ConvolutionType(SideLength, SideLength, maxIntager, maxIntager, σ);
             gausiionKernelSelector = new GausiionKernelSelector(convolutionType);
-
 
             for (int i = 0; i < width; i++)
             {
@@ -334,9 +331,9 @@ namespace Gray
             int width = bitmap[0].Length, height = bitmap.Length;
             int[][] matrix = InitMatrix<int>(SideLength, SideLength);
             int x, y;
-            for(int i = 0; i < SideLength; i++)
+            for (int i = 0; i < SideLength; i++)
             {
-                for(int j = 0; j < SideLength; j++)
+                for (int j = 0; j < SideLength; j++)
                 {
                     x = center.X - maxIntager + j;
                     x = BorderAdjust(x, 0, width - 1);
@@ -378,6 +375,10 @@ namespace Gray
             }
             return matrix;
         }
+        public static T[][] InitMatrix<T>(Size size)
+        {
+            return InitMatrix<T>(size.Width, size.Height);
+        }
         /// <summary>
         /// dogo取异
         /// </summary>
@@ -389,9 +390,9 @@ namespace Gray
                 return null;
             int with = size.Width, height = size.Height;
             int[][] DMatrix = InitMatrix<int>(with, height);
-            for(int i = 0; i < height; i++)
+            for (int i = 0; i < height; i++)
             {
-                for(int j = 0;j < with; j++)
+                for (int j = 0; j < with; j++)
                 {
                     DMatrix[i][j] = p1[i][j] - p2[i][j];
                 }
@@ -399,7 +400,7 @@ namespace Gray
             return DMatrix;
         }
 
-        public static Size GetImgSize(int[][] bitmap)
+        public static Size GetImgSize<T>(T[][] bitmap)
         {
             int width = bitmap[0].Length, height = bitmap.Length;
             return new Size(width, height);

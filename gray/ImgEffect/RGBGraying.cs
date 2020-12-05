@@ -216,6 +216,34 @@ namespace Gray
             image = ImageHelper.WriteImg(rgbValues, image.Width, image.Height);
             return image;
         }
+
+        public static Bitmap Get2BWImage(double[][] image, double level)
+        {
+            Size size = ImageAnalyse.GetImgSize(image);
+            int width = size.Width, height = size.Height;
+            int[][] B2Img = ImageAnalyse.InitMatrix<int>(size);
+
+            for(int i = 0; i < height; i++)
+            {
+                for(int j = 0; j < width; j++)
+                {
+                    B2Img[i][j] = Math.Abs(image[i][j]) >= level ? 255 : 0;
+                }
+            }
+            return ImageHelper.WriteGrayImg(B2Img, size);
+        }
+
+        public static Bitmap Get2BWImage(Gray.ImgEffect.Point[] points, Size size)
+        {
+            int width = size.Width, height = size.Height;
+            int[][] B2Img = ImageAnalyse.InitMatrix<int>(size);
+            foreach(var item in points)
+            {
+                B2Img[item.Y][item.X] = 255;
+            }
+            return ImageHelper.WriteGrayImg(B2Img, size);
+        }
+
         /// <summary>
         /// 根据平均灰度二值化图片
         /// </summary>

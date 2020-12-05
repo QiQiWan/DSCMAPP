@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
-namespace Gray.ImgEffect
+namespace Gray
 {
     public class GausiionKernelSelector
     {
@@ -79,9 +74,9 @@ namespace Gray.ImgEffect
         {
             int sum = 0, Kwidth = Kernel.Width, Kheight = Kernel.Height;
             int Px, Py;
-            for(int i = 0; i < Kheight; i++)
+            for (int i = 0; i < Kheight; i++)
             {
-                for(int j = 0; j < Kwidth; j++)
+                for (int j = 0; j < Kwidth; j++)
                 {
                     Px = x - maxIntager + j;
                     Px = BorderAdjust(Px, 0, width - 1);
@@ -146,17 +141,17 @@ namespace Gray.ImgEffect
             {
                 Py = y - maxIntager + i;
                 Py = BorderAdjust(Py, 0, height - 1);
-                if(Py != y)
+                if (Py != y)
                 {
                     sum += bitmap[Py][x] * kernel[i][maxIntager];
                     CrossSum += kernel[i][maxIntager];
                 }
             }
-            for(int j = 0; j < Kwidth; j++)
+            for (int j = 0; j < Kwidth; j++)
             {
                 Px = x - maxIntager + j;
                 Px = BorderAdjust(Px, 0, width - 1);
-                if(Px != x)
+                if (Px != x)
                 {
                     sum += bitmap[y][Px] * kernel[maxIntager][j];
                     CrossSum += kernel[maxIntager][j];
@@ -166,7 +161,13 @@ namespace Gray.ImgEffect
             CrossSum += kernel[maxIntager][maxIntager];
             return sum / CrossSum;
         }
-
+        /// <summary>
+        /// 边界调整
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="lBorder"></param>
+        /// <param name="uborder"></param>
+        /// <returns></returns>
         private int BorderAdjust(int n, int lBorder, int uborder)
         {
             if (n < lBorder)
