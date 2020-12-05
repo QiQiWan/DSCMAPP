@@ -7,6 +7,7 @@ namespace Gray
         public Bitmap OriginBitmap = null;
         public Bitmap GrayBitmap;
         public ImageCollectionMode mode;
+        public Bitmap CurrentBitmap;
         public string filePath = null;
         public int grayLevel;
         public ImageCollection()
@@ -35,6 +36,7 @@ namespace Gray
 
         public void UpdateGray()
         {
+            this.CurrentBitmap = OriginBitmap;
             this.GrayBitmap = RGBGraying.GetGrayImage(OriginBitmap);
             // GrayBitmap = ImageAnalyse.GaussionBlur(GrayBitmap, 0.5);
             grayLevel = RGBGraying.GetAverageGrayLevel(GrayBitmap);

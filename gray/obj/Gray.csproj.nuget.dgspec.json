@@ -1,21 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj": {}
+    "C:\\Users\\Administrator\\Desktop\\C#\\DSCMAPP\\gray\\Gray.csproj": {}
   },
   "projects": {
-    "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj": {
+    "C:\\Users\\Administrator\\Desktop\\C#\\DSCMAPP\\gray\\Gray.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
+        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\C#\\DSCMAPP\\gray\\Gray.csproj",
         "projectName": "Gray",
-        "projectPath": "H:\\study\\C#实验\\数字图像\\gray\\Gray.csproj",
-        "packagesPath": "C:\\Users\\EatRice\\.nuget\\packages\\",
-        "outputPath": "H:\\study\\C#实验\\数字图像\\gray\\obj\\",
+        "projectPath": "C:\\Users\\Administrator\\Desktop\\C#\\DSCMAPP\\gray\\Gray.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Desktop\\C#\\DSCMAPP\\gray\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
-          "C:\\Users\\EatRice\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

@@ -174,8 +174,20 @@ namespace Gray.ImgEffect
             }
             return DogImg;
         }
-
+        /// <summary>
+        /// 计算差分矩阵和查找极值点
+        /// </summary>
+        /// <param name="samplingGroup"></param>
         public void FindExtremePoint(SamplingGroup samplingGroup)
+        {
+            FindExtremePoint(samplingGroup, 3);
+        }
+        /// <summary>
+        /// 计算差分矩阵和查找极值点
+        /// </summary>
+        /// <param name="samplingGroup">采样组</param>
+        /// <param name="level">极值点最小阈值</param>
+        public void FindExtremePoint(SamplingGroup samplingGroup, double level)
         {
             // 计算差分矩阵
             DogDiff(samplingGroup);
@@ -196,7 +208,7 @@ namespace Gray.ImgEffect
                     for (int l = 0; l < width; l++)
                     {
                         tempPoint.Clear();
-                        if (DOGScale[i][j][l] <= 3)
+                        if (DOGScale[i][j][l] <= level)
                             continue;
                         center = Math.Abs(DOGScale[i][j][l]);
                         for (int r = j - 1; r <= j + 1; r++)

@@ -1,8 +1,8 @@
 ﻿using Gray.ImgEffect;
+using Gray.Unit;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Gray.Unit;
 
 namespace Gray
 {
@@ -32,12 +32,12 @@ namespace Gray
         /// <summary>
         /// 在此对变量进行注解
         /// </summary>
-        private ImageCollection[] imageCollection = new ImageCollection[2];//本窗口的两幅主图像,包括参考图像和变形图像
-        private Bitmap RGBBitmap = null;//原始彩色图像
-        private Bitmap GrayBitmap = null;//处理后的灰度图像
-        private int index = -1;
-        private Bitmap CurrentBitmap = null;
-        private GaussPyramid[] GaussPyramids = new GaussPyramid[2];
+        private static ImageCollection[] imageCollection = new ImageCollection[2];//本窗口的两幅主图像,包括参考图像和变形图像
+        private static Bitmap RGBBitmap = null;//原始彩色图像
+        private static Bitmap GrayBitmap = null;//处理后的灰度图像
+        private static int index = -1;
+        private static Image CurrentImage = null;
+        private static GaussPyramid[] GaussPyramids = new GaussPyramid[2];
 
         //private readonly object LOCK;//锁定线程
 
@@ -152,9 +152,10 @@ namespace Gray
             Shell.WriteLine(Shell.PreDefineSearchRAM());
 
             StatusBar.ChangeStatus(process, StatusBar.StatusMode.done);
-            
+
             ChangePicBox();
         }
+
         private void ChangeCurrentImage(ImageCollection imageCollection)
         {
             RGBBitmap = imageCollection.OriginBitmap;
@@ -163,17 +164,40 @@ namespace Gray
             if (GaussPyramids[index].ImageColl != imageCollection)
                 GaussPyramids[index] = new GaussPyramid(imageCollection);
             fileNameBox.Text = imageCollection.filePath;
-            orginBitmap = null;
-            CurrentBitmap = imageCollection.OriginBitmap;
-            DisplayImage(previewBox, imageCollection.OriginBitmap);
+            originBitmap = null;
+            DisplayImage(previewBox, imageCollection.CurrentBitmap);
         }
+        /// <summary>
+        /// 让左侧显示框显示图片
+        /// </summary>
+        /// <param name="pictureBox"></param>
+        /// <param name="bitmap"></param>
         private void DisplayImage(PictureBox pictureBox, Bitmap bitmap)
+        {
+            previewBox.Height = (int)Math.Round((double)bitmap.Height / (double)bitmap.Width * (double)pictureBox.Width, 0);
+            previewBox.Image = bitmap;
+            CurrentImage = pictureBox.Image;
+            imageCollection[index].CurrentBitmap = bitmap;
+            ChangeLimit(pictureBox.Width, pictureBox.Height);
+        }
+        /// <summary>
+        /// 显示绘制图片
+        /// </summary>
+        /// <param name="pictureBox"></param>
+        /// <param name="bitmap"></param>
+        /// <param name="isDraw"></param>
+        private void DisplayImage(PictureBox pictureBox, Bitmap bitmap, bool isDraw)
         {
             previewBox.Height = (int)Math.Round((double)bitmap.Height / (double)bitmap.Width * (double)pictureBox.Width, 0);
             previewBox.Image = bitmap;
             ChangeLimit(pictureBox.Width, pictureBox.Height);
         }
-
+        private void DisplayImage(PictureBox pictureBox, Image bitmap, bool isDraw)
+        {
+            previewBox.Height = (int)Math.Round((double)bitmap.Height / (double)bitmap.Width * (double)pictureBox.Width, 0);
+            previewBox.Image = bitmap;
+            ChangeLimit(pictureBox.Width, pictureBox.Height);
+        }
         /// <summary>
         /// 当前显示图标改变之后触发的事件
         /// </summary>
@@ -224,6 +248,11 @@ namespace Gray
 
         #region 图形绘制
         #region 绘制特定形状
+        /// <summary>
+        /// 绘制矩形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Equal_Click(object sender, EventArgs e)
         {
             if (RGBBitmap == null)
@@ -231,37 +260,32 @@ namespace Gray
                 Shell.WriteLine("### 未选择图片, 操作中止!");
                 return;
             }
-            if (X.Text == "" || Y.Text == "" || RecWidth.Text == "" || RecHeight.Text == "")
+            freeDraw = !freeDraw;
+            DrawingType = DrawType.Rec;
+            originBitmap = imageCollection[index].OriginBitmap;
+            if (freeDraw)
             {
-                Shell.WriteLine("### 右边四个框必填, 操作中止!");
-                return;
+                drawRect.Text = "框选区域(开)";
+                Shell.WriteLine("$$$ 打开区域框选");
             }
-            StartDraw();
-            using (Image TempImage = previewBox.Image)
+            else
             {
-                using (Graphics g = Graphics.FromImage(TempImage))
-                {
-                    int x = int.Parse(X.Text);
-                    int y = int.Parse(Y.Text);
-                    int width = int.Parse(RecWidth.Text);
-                    int height = int.Parse(RecHeight.Text);
-                    Shell.WriteLine(">>> 获取长宽高");
-                    if ((x + width) > previewBox.Image.Width || (y + height) > previewBox.Image.Height)
-                    {
-                        Shell.WriteLine("### 定位超限!");
-                        return;
-                    }
-                    g.DrawRectangle(new Pen(Color.Red, 2), x, y, width, height);
-                    DisplayImage(previewBox, new Bitmap(TempImage));
-                }
+                //updateImage();//关闭自由绘制后保存图片//不需要保存图片
+                drawRect.Text = "框选区域(关)";
+                Shell.WriteLine("$$$ 关闭区域框选");
             }
+            GC.Collect();
         }
         #endregion
         #region 自由绘制
+        private enum DrawType { Free, Rec };
         private static bool freeDraw = false;
         private static bool drawing = false;
+        private static DrawType DrawingType = DrawType.Rec;
         private static System.Drawing.Point P1 = new System.Drawing.Point();
-        private static Bitmap orginBitmap = null;
+        private static Image originBitmap;
+        private static System.Drawing.Point StartPoint;
+        private static System.Drawing.Point EndPoint;
         private void FreeDraw_Click(object sender, EventArgs e)
         {
             if (previewBox.Image == null)
@@ -270,10 +294,11 @@ namespace Gray
                 return;
             }
             freeDraw = !freeDraw;
+            DrawingType = DrawType.Free;
+            originBitmap = imageCollection[index].OriginBitmap;
             if (freeDraw)
             {
                 FreeDraw.Text = "自由绘制(开)";
-                StartDraw();
                 Shell.WriteLine("$$$ 打开自由绘制");
             }
             else
@@ -290,61 +315,92 @@ namespace Gray
                 return;
             drawing = true;
             P1 = new System.Drawing.Point(e.X, e.Y);
+            StartPoint = new System.Drawing.Point(e.X, e.Y);
         }
         private void PreviewBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (!freeDraw)
                 return;
             drawing = false;
+            EndPoint = new System.Drawing.Point(e.X, e.Y);
         }
         private void PreviewBox_MouseMove(object sender, MouseEventArgs e)
         {
+            if (CurrentImage == null)
+                return;
             if (!freeDraw)
                 return;
             if (!drawing)
                 return;
             if (e.Button != MouseButtons.Left)
                 return;
-            try
+            
+            if (DrawingType == DrawType.Free)
             {
-                using (Image tempImage = previewBox.Image)
+                try
                 {
-                    using (Graphics g = Graphics.FromImage(tempImage))
+                    using (Image tempImage = previewBox.Image)
                     {
-                        float widthPer = (float)tempImage.Width / (float)previewBox.Width;
-                        float heightPer = (float)tempImage.Height / (float)previewBox.Height;
-                        float widthInsert = 1 / widthPer;
-                        float heightInsert = 1 / heightPer;
-                        System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
-                        P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
-                        P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        g.DrawLine(new Pen(Color.Red, 2), P1, currentPoint);
-                        P1 = new System.Drawing.Point(e.X, e.Y);
-                        DisplayImage(previewBox, new Bitmap(tempImage));
-                        SetMousePosition(e.X, e.Y);
+                        using (Graphics g = Graphics.FromImage(tempImage))
+                        {
+                            float widthPer = (float)tempImage.Width / (float)previewBox.Width;
+                            float heightPer = (float)tempImage.Height / (float)previewBox.Height;
+                            float widthInsert = 1 / widthPer;
+                            float heightInsert = 1 / heightPer;
+                            System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
+                            P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
+                            P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
+                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                            g.DrawLine(new Pen(Color.Red, 2), P1, currentPoint);
+                            P1 = new System.Drawing.Point(e.X, e.Y);
+                            DisplayImage(previewBox, new Bitmap(tempImage), true);
+                            SetMousePosition(e.X, e.Y);
+                        }
                     }
                 }
+                catch (Exception err)
+                {
+                    Shell.WriteLine("### " + err.Message);
+                }
             }
-            catch (Exception err)
+
+            if (DrawingType == DrawType.Rec)
             {
-                Shell.WriteLine("### " + err.Message);
+                previewBox.Image = originBitmap;
+                try
+                {
+                    using (Image tempImage = previewBox.Image)
+                    {
+                        using (Graphics g = Graphics.FromImage(tempImage))
+                        {
+                            float widthPer = (float)tempImage.Width / (float)previewBox.Width;
+                            float heightPer = (float)tempImage.Height / (float)previewBox.Height;
+                            float widthInsert = 1 / widthPer;
+                            float heightInsert = 1 / heightPer;
+                            System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
+                            P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
+                            P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
+                            Rectangle rectangle = new Rectangle(P1.X, P1.Y, currentPoint.X - P1.X, currentPoint.Y - P1.Y);
+                            g.DrawRectangle(new Pen(Color.Red, 2), rectangle);
+                            DisplayImage(previewBox, new Bitmap(tempImage), true);
+                            RecPosition.Text = $"({StartPoint.X}, {StartPoint.Y} - ({e.X}, {e.Y})";
+                            SetMousePosition(e.X, e.Y);
+                        }
+                    }
+                }
+                catch(Exception error)
+                {
+                    Shell.WriteLine(error.Message);
+                }
             }
         }
         private void ClearDraw_Click(object sender, EventArgs e)
         {
-            if (orginBitmap == null)
+            if (originBitmap == null)
                 return;
-            DisplayImage(previewBox, orginBitmap);
-            orginBitmap = null;
+            DisplayImage(previewBox, originBitmap, true);
         }
-        private void StartDraw()
-        {
-            if (previewBox.Image == null)
-                return;
-            if (orginBitmap == null)
-                orginBitmap = new Bitmap(previewBox.Image);
-        }
+
         private void SetMousePosition(int x, int y)
         {
             mouseStrip.Text = "鼠标: " + x + ", " + y;
@@ -476,25 +532,28 @@ namespace Gray
 
         private void reset_Click(object sender, EventArgs e)
         {
-            if (CurrentBitmap == null)
+            if (imageCollection[index].CurrentBitmap == null)
                 return;
-            DisplayImage(previewBox, CurrentBitmap);
+            DisplayImage(previewBox, imageCollection[index].CurrentBitmap);
         }
 
         private void DOG_Click(object sender, EventArgs e)
         {
             if (GrayBitmap == null)
                 return;
+            // 设置极值点最小值阈值
+            double level = 2;
+            double.TryParse(peaklevel.Text, out level);
 
             SamplingGroup sampling = GaussPyramids[index].SamplingGroups[0];
 
             GaussPyramids[index].FindExtremePoint(sampling);
 
-            Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
-            Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
+            //Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
+            //Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
 
-            //double level = double.Parse(peaklevel.Text);
-            //Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].DOGScale[1], level);
+            level = double.Parse(peaklevel.Text);
+            Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].DOGScale[1], level);
 
             DisplayImage(previewBox, B2Img);
 
