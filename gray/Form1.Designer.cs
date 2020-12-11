@@ -34,6 +34,8 @@
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.graying = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RecPosition = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.DOGFind = new System.Windows.Forms.Button();
             this.peaklevel = new System.Windows.Forms.TextBox();
@@ -73,8 +75,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label2 = new System.Windows.Forms.Label();
-            this.RecPosition = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -85,16 +85,16 @@
             // fileNameBox
             // 
             this.fileNameBox.Enabled = false;
-            this.fileNameBox.Font = new System.Drawing.Font("宋体", 12F);
+            this.fileNameBox.Font = new System.Drawing.Font("SimSun", 12F);
             this.fileNameBox.Location = new System.Drawing.Point(25, 148);
             this.fileNameBox.Margin = new System.Windows.Forms.Padding(4);
             this.fileNameBox.Name = "fileNameBox";
-            this.fileNameBox.Size = new System.Drawing.Size(470, 26);
+            this.fileNameBox.Size = new System.Drawing.Size(470, 30);
             this.fileNameBox.TabIndex = 0;
             // 
             // chooseFile
             // 
-            this.chooseFile.Font = new System.Drawing.Font("宋体", 12F);
+            this.chooseFile.Font = new System.Drawing.Font("SimSun", 12F);
             this.chooseFile.Location = new System.Drawing.Point(25, 203);
             this.chooseFile.Margin = new System.Windows.Forms.Padding(4);
             this.chooseFile.Name = "chooseFile";
@@ -119,7 +119,7 @@
             // 
             // graying
             // 
-            this.graying.Font = new System.Drawing.Font("宋体", 12F);
+            this.graying.Font = new System.Drawing.Font("SimSun", 12F);
             this.graying.Location = new System.Drawing.Point(342, 203);
             this.graying.Margin = new System.Windows.Forms.Padding(4);
             this.graying.Name = "graying";
@@ -154,7 +154,7 @@
             this.groupBox1.Controls.Add(this.graying);
             this.groupBox1.Controls.Add(this.chooseFile);
             this.groupBox1.Controls.Add(this.fileNameBox);
-            this.groupBox1.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox1.Font = new System.Drawing.Font("SimSun", 12F);
             this.groupBox1.Location = new System.Drawing.Point(875, 63);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
@@ -164,19 +164,37 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "工作空间";
             // 
+            // RecPosition
+            // 
+            this.RecPosition.AutoSize = true;
+            this.RecPosition.Location = new System.Drawing.Point(333, 329);
+            this.RecPosition.Name = "RecPosition";
+            this.RecPosition.Size = new System.Drawing.Size(29, 20);
+            this.RecPosition.TabIndex = 32;
+            this.RecPosition.Text = "  ";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(175, 329);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(149, 20);
+            this.label2.TabIndex = 32;
+            this.label2.Text = "选取的区域为：";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(137, 494);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(88, 16);
+            this.label5.Size = new System.Drawing.Size(109, 20);
             this.label5.TabIndex = 16;
             this.label5.Text = "极值点阈值";
             // 
             // DOGFind
             // 
             this.DOGFind.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.DOGFind.Font = new System.Drawing.Font("宋体", 12F);
+            this.DOGFind.Font = new System.Drawing.Font("SimSun", 12F);
             this.DOGFind.Location = new System.Drawing.Point(336, 488);
             this.DOGFind.Margin = new System.Windows.Forms.Padding(4);
             this.DOGFind.Name = "DOGFind";
@@ -190,12 +208,12 @@
             // 
             this.peaklevel.Location = new System.Drawing.Point(252, 488);
             this.peaklevel.Name = "peaklevel";
-            this.peaklevel.Size = new System.Drawing.Size(77, 26);
+            this.peaklevel.Size = new System.Drawing.Size(77, 30);
             this.peaklevel.TabIndex = 15;
             // 
             // reset
             // 
-            this.reset.Font = new System.Drawing.Font("宋体", 12F);
+            this.reset.Font = new System.Drawing.Font("SimSun", 12F);
             this.reset.Location = new System.Drawing.Point(188, 203);
             this.reset.Margin = new System.Windows.Forms.Padding(4);
             this.reset.Name = "reset";
@@ -209,7 +227,7 @@
             // 
             this.GaossionCor.Location = new System.Drawing.Point(397, 451);
             this.GaossionCor.Name = "GaossionCor";
-            this.GaossionCor.Size = new System.Drawing.Size(77, 26);
+            this.GaossionCor.Size = new System.Drawing.Size(77, 30);
             this.GaossionCor.TabIndex = 29;
             // 
             // label4
@@ -217,14 +235,14 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(294, 456);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 16);
+            this.label4.Size = new System.Drawing.Size(89, 20);
             this.label4.TabIndex = 28;
             this.label4.Text = "高斯系数";
             // 
             // Gaossion
             // 
             this.Gaossion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.Gaossion.Font = new System.Drawing.Font("宋体", 12F);
+            this.Gaossion.Font = new System.Drawing.Font("SimSun", 12F);
             this.Gaossion.Location = new System.Drawing.Point(175, 451);
             this.Gaossion.Margin = new System.Windows.Forms.Padding(4);
             this.Gaossion.Name = "Gaossion";
@@ -236,7 +254,7 @@
             // 
             // average2BW
             // 
-            this.average2BW.Font = new System.Drawing.Font("宋体", 12F);
+            this.average2BW.Font = new System.Drawing.Font("SimSun", 12F);
             this.average2BW.Location = new System.Drawing.Point(25, 451);
             this.average2BW.Margin = new System.Windows.Forms.Padding(4);
             this.average2BW.Name = "average2BW";
@@ -248,7 +266,7 @@
             // 
             // shift
             // 
-            this.shift.Font = new System.Drawing.Font("宋体", 12F);
+            this.shift.Font = new System.Drawing.Font("SimSun", 12F);
             this.shift.Location = new System.Drawing.Point(368, 55);
             this.shift.Margin = new System.Windows.Forms.Padding(4);
             this.shift.Name = "shift";
@@ -263,15 +281,15 @@
             this.imageCol.FormattingEnabled = true;
             this.imageCol.Location = new System.Drawing.Point(25, 55);
             this.imageCol.Name = "imageCol";
-            this.imageCol.Size = new System.Drawing.Size(336, 24);
+            this.imageCol.Size = new System.Drawing.Size(336, 28);
             this.imageCol.TabIndex = 19;
             this.imageCol.SelectedIndexChanged += new System.EventHandler(this.ImageCol_SelectedIndexChanged);
             // 
             // clearDraw
             // 
             this.clearDraw.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.clearDraw.Font = new System.Drawing.Font("宋体", 12F);
-            this.clearDraw.Location = new System.Drawing.Point(178, 364);
+            this.clearDraw.Font = new System.Drawing.Font("SimSun", 12F);
+            this.clearDraw.Location = new System.Drawing.Point(179, 364);
             this.clearDraw.Margin = new System.Windows.Forms.Padding(4);
             this.clearDraw.Name = "clearDraw";
             this.clearDraw.Size = new System.Drawing.Size(138, 26);
@@ -283,7 +301,7 @@
             // FreeDraw
             // 
             this.FreeDraw.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.FreeDraw.Font = new System.Drawing.Font("宋体", 12F);
+            this.FreeDraw.Font = new System.Drawing.Font("SimSun", 12F);
             this.FreeDraw.Location = new System.Drawing.Point(25, 364);
             this.FreeDraw.Margin = new System.Windows.Forms.Padding(4);
             this.FreeDraw.Name = "FreeDraw";
@@ -298,7 +316,7 @@
             this.picHeight.AutoSize = true;
             this.picHeight.Location = new System.Drawing.Point(361, 370);
             this.picHeight.Name = "picHeight";
-            this.picHeight.Size = new System.Drawing.Size(0, 16);
+            this.picHeight.Size = new System.Drawing.Size(0, 20);
             this.picHeight.TabIndex = 16;
             // 
             // picWidth
@@ -306,12 +324,12 @@
             this.picWidth.AutoSize = true;
             this.picWidth.Location = new System.Drawing.Point(171, 370);
             this.picWidth.Name = "picWidth";
-            this.picWidth.Size = new System.Drawing.Size(0, 16);
+            this.picWidth.Size = new System.Drawing.Size(0, 20);
             this.picWidth.TabIndex = 15;
             // 
             // drawRect
             // 
-            this.drawRect.Font = new System.Drawing.Font("宋体", 12F);
+            this.drawRect.Font = new System.Drawing.Font("SimSun", 12F);
             this.drawRect.Location = new System.Drawing.Point(25, 324);
             this.drawRect.Margin = new System.Windows.Forms.Padding(4);
             this.drawRect.Name = "drawRect";
@@ -323,7 +341,7 @@
             // 
             // BW2
             // 
-            this.BW2.Font = new System.Drawing.Font("宋体", 12F);
+            this.BW2.Font = new System.Drawing.Font("SimSun", 12F);
             this.BW2.Location = new System.Drawing.Point(342, 266);
             this.BW2.Margin = new System.Windows.Forms.Padding(4);
             this.BW2.Name = "BW2";
@@ -338,7 +356,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(156, 271);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 16);
+            this.label1.Size = new System.Drawing.Size(179, 20);
             this.label1.TabIndex = 6;
             this.label1.Text = "二值化分界点0-255";
             // 
@@ -346,7 +364,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(25, 268);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(125, 26);
+            this.textBox1.Size = new System.Drawing.Size(125, 30);
             this.textBox1.TabIndex = 5;
             this.textBox1.Text = "120";
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox1_KeyPress);
@@ -363,7 +381,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(1422, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1422, 33);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -375,31 +393,31 @@
             this.另存问ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 打开分析文件ToolStripMenuItem
             // 
             this.打开分析文件ToolStripMenuItem.Name = "打开分析文件ToolStripMenuItem";
-            this.打开分析文件ToolStripMenuItem.Size = new System.Drawing.Size(174, 24);
+            this.打开分析文件ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.打开分析文件ToolStripMenuItem.Text = "打开分析文件";
             // 
             // 保存ToolStripMenuItem
             // 
             this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(174, 24);
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.保存ToolStripMenuItem.Text = "保存";
             // 
             // 另存问ToolStripMenuItem
             // 
             this.另存问ToolStripMenuItem.Name = "另存问ToolStripMenuItem";
-            this.另存问ToolStripMenuItem.Size = new System.Drawing.Size(174, 24);
+            this.另存问ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.另存问ToolStripMenuItem.Text = "另存为";
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(174, 24);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click_1);
             // 
@@ -409,25 +427,26 @@
             this.更改图片ToolStripMenuItem,
             this.重新计算ToolStripMenuItem});
             this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
-            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.编辑ToolStripMenuItem.Text = "编辑";
             // 
             // 更改图片ToolStripMenuItem
             // 
             this.更改图片ToolStripMenuItem.Name = "更改图片ToolStripMenuItem";
-            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(142, 24);
+            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
             this.更改图片ToolStripMenuItem.Text = "更改图片";
+            this.更改图片ToolStripMenuItem.Click += new System.EventHandler(this.ChooseFile_Click);
             // 
             // 重新计算ToolStripMenuItem
             // 
             this.重新计算ToolStripMenuItem.Name = "重新计算ToolStripMenuItem";
-            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(142, 24);
+            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
             this.重新计算ToolStripMenuItem.Text = "重新计算";
             // 
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // statusStrip1
@@ -453,21 +472,21 @@
             // 
             this.RAMDisplay.Margin = new System.Windows.Forms.Padding(36, 3, 36, 3);
             this.RAMDisplay.Name = "RAMDisplay";
-            this.RAMDisplay.Size = new System.Drawing.Size(55, 20);
+            this.RAMDisplay.Size = new System.Drawing.Size(68, 20);
             this.RAMDisplay.Text = "工作内存";
             // 
             // CPUDisplay
             // 
             this.CPUDisplay.Margin = new System.Windows.Forms.Padding(36, 3, 36, 3);
             this.CPUDisplay.Name = "CPUDisplay";
-            this.CPUDisplay.Size = new System.Drawing.Size(56, 20);
+            this.CPUDisplay.Size = new System.Drawing.Size(70, 20);
             this.CPUDisplay.Text = "CPU效能";
             // 
             // process
             // 
             this.process.Margin = new System.Windows.Forms.Padding(36, 3, 36, 3);
             this.process.Name = "process";
-            this.process.Size = new System.Drawing.Size(58, 20);
+            this.process.Size = new System.Drawing.Size(71, 20);
             this.process.Text = "分析完成!";
             // 
             // progressBar
@@ -480,19 +499,19 @@
             // 
             this.timeTick.Margin = new System.Windows.Forms.Padding(36, 3, 36, 3);
             this.timeTick.Name = "timeTick";
-            this.timeTick.Size = new System.Drawing.Size(55, 20);
+            this.timeTick.Size = new System.Drawing.Size(68, 20);
             this.timeTick.Text = "已用时间";
             // 
             // mouseStrip
             // 
             this.mouseStrip.Name = "mouseStrip";
-            this.mouseStrip.Size = new System.Drawing.Size(34, 21);
+            this.mouseStrip.Size = new System.Drawing.Size(42, 20);
             this.mouseStrip.Text = "鼠标:";
             // 
             // average
             // 
             this.average.Name = "average";
-            this.average.Size = new System.Drawing.Size(58, 21);
+            this.average.Size = new System.Drawing.Size(72, 20);
             this.average.Text = "平均灰度:";
             // 
             // groupBox2
@@ -509,27 +528,9 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(175, 329);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 16);
-            this.label2.TabIndex = 32;
-            this.label2.Text = "选取的区域为：";
-            // 
-            // RecPosition
-            // 
-            this.RecPosition.AutoSize = true;
-            this.RecPosition.Location = new System.Drawing.Point(333, 329);
-            this.RecPosition.Name = "RecPosition";
-            this.RecPosition.Size = new System.Drawing.Size(24, 16);
-            this.RecPosition.TabIndex = 32;
-            this.RecPosition.Text = "  ";
-            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1422, 753);
@@ -538,7 +539,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Font = new System.Drawing.Font("宋体", 12F);
+            this.Font = new System.Drawing.Font("SimSun", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);

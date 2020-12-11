@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Gray
@@ -19,6 +20,7 @@ namespace Gray
         {
             AllocConsole();//弹出控制台
             Shell.WriteLine(">>> 程序已启动!");
+            Thread.Sleep(1000);
             Shell.WriteLine(Shell.PreDefineSearchRAM());
             Shell.WriteLine(Shell.PreDefineSearchCPU());
             Application.EnableVisualStyles();

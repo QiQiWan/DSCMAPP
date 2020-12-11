@@ -126,7 +126,7 @@ namespace Gray.ImgEffect
                 tempImg = DownSampling(tempGroup.SamplingObjects[S].GauBlurImg);
                 tempsize = ImageAnalyse.GetImgSize(tempImg);
                 layout++;
-            } while (tempsize.GetMinSize() > 2);
+            } while (tempsize.GetMinSize() > 200);
             return SamplingGroups;
         }
         public SamplingGroup FindGroupBySize(Size size)
@@ -344,5 +344,37 @@ namespace Gray.ImgEffect
         {
             return $"({X}-{Y})";
         }
+    }
+    public struct FPoint
+    {
+        public float X;
+        public float Y;
+        public readonly float Step;
+        public FPoint(float X, float Y, float step)
+        {
+            this.X = X;
+            this.Y = Y;
+            this.Step = step;
+        }
+        public static bool operator ==(FPoint p1, FPoint p2)
+        {
+            if (p1.X == p2.X && p1.Y == p2.Y && p1.Step == p2.Step)
+                return true;
+            return false;
+        }
+        public static bool operator !=(FPoint p1, FPoint p2)
+        {
+            if (p1 == p2)
+                return false;
+            return true;
+        }
+        public override string ToString()
+        {
+            return $"({X}-{Y}-{Step})";
+        }
+        public void MoveRight() => this.X += Step;
+        public void MoveLeft() => X -= Step;
+        public void MoveTop() => Y -= Step;
+        public void MoveDown() => Y += Step;
     }
 }

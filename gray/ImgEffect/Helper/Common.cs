@@ -1,4 +1,6 @@
-﻿namespace Gray
+﻿using System;
+
+namespace Gray
 {
     //全局变量类型
     class Common
@@ -21,6 +23,18 @@
             if (n > uborder)
                 return 2 * uborder - n;
             return n;
+        }
+        public static double Max(double t1, double t2)
+        {
+            return t1 > t2 ? t1 : t2;
+        }
+        public static double Min(double t1, double t2)
+        {
+            return t1 < t2 ? t1 : t2;
+        }
+        public static double Diff(double t1, double t2)
+        {
+            return Math.Abs(t1 - t2);
         }
     }
 }

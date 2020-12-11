@@ -137,7 +137,7 @@ namespace Gray
 
             byte[] rgbValues = ImageHelper.GetImgArr(grayBitmap);
 
-            for(int i = 0; i < (rgbValues.Length / 3); i++)
+            for (int i = 0; i < (rgbValues.Length / 3); i++)
             {
                 s += rgbValues[3 * i];
             }
@@ -187,7 +187,7 @@ namespace Gray
         {
             byte[] rgbValues = ImageHelper.GetImgArr(image);
 
-            for(int i = 0; i < (rgbValues.Length / 3); i++)
+            for (int i = 0; i < (rgbValues.Length / 3); i++)
             {
                 Color temp = Color.FromArgb(rgbValues[3 * i], rgbValues[3 * i + 1], rgbValues[3 * i + 2]);
                 int gray = GetGrayBit(temp);
@@ -223,9 +223,9 @@ namespace Gray
             int width = size.Width, height = size.Height;
             int[][] B2Img = ImageAnalyse.InitMatrix<int>(size);
 
-            for(int i = 0; i < height; i++)
+            for (int i = 0; i < height; i++)
             {
-                for(int j = 0; j < width; j++)
+                for (int j = 0; j < width; j++)
                 {
                     B2Img[i][j] = Math.Abs(image[i][j]) >= level ? 255 : 0;
                 }
@@ -237,7 +237,7 @@ namespace Gray
         {
             int width = size.Width, height = size.Height;
             int[][] B2Img = ImageAnalyse.InitMatrix<int>(size);
-            foreach(var item in points)
+            foreach (var item in points)
             {
                 B2Img[item.Y][item.X] = 255;
             }
@@ -282,7 +282,7 @@ namespace Gray
             {
                 temp[position] = rgbValues[3 * i];
                 position++;
-                if(position == width)
+                if (position == width)
                 {
                     position = 0;
                     tempMatrix[i / width] = temp;
@@ -296,7 +296,7 @@ namespace Gray
         {
             byte[] imgArr = ImageHelper.GetImgArr(bitmap);
             int len = imgArr.Length / 3;
-            for(int i = 0; i < len; i += 3)
+            for (int i = 0; i < len; i += 3)
             {
                 if (!(imgArr[i] == imgArr[i + 1] && imgArr[i] == imgArr[i + 2]))
                     return false;

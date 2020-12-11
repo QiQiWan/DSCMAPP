@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>sun.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MyTools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,11 +67,14 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImgEffect\DSCMSelector.cs" />
     <Compile Include="ImgEffect\GausiionKernelSelector.cs" />
     <Compile Include="ImgEffect\GaussPyramid.cs" />
     <Compile Include="ImgEffect\Helper\Common.cs" />
+    <Compile Include="ImgEffect\Helper\DrawHelper.cs" />
     <Compile Include="ImgEffect\Helper\FileHelper.cs" />
     <Compile Include="ImgEffect\Helper\ImageHelper.cs" />
+    <Compile Include="ImgEffect\Helper\MathHelper.cs" />
     <Compile Include="ImgEffect\Helper\UnitHelper.cs" />
     <Compile Include="ImgEffect\MyDraw.cs" />
     <Compile Include="ImgEffect\RGBGraying.cs" />
@@ -107,6 +113,9 @@
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sun.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
