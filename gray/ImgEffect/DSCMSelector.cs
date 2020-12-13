@@ -38,28 +38,70 @@ namespace Gray.ImgEffect
         /// <param name="img">原始图像</param>
         /// <param name="step">两像素间的插值个数</param>
         /// <returns>插值后的图像</returns>
-        public int[][] InterPolation(int[][] img, int step)
+        public static int[][] InterPolation(int[][] img, int step)
         {
             int Multiple = step + 1;
             int width = img[0].Length, height = img.Length;
             int newWidth = width * Multiple - step, newHeight = height * Multiple - step;
-            int[][] newImg = new int[newHeight][];
-            for(int i = 0; i < height - 1; i++)
+            int[][] newImg = ImageAnalyse.InitMatrix<int>(newWidth, newHeight);
+            double range = 1.0 / Multiple;
+            int xposi = 0, yposi = 0;
+            double xAp = 0, yAp = 0;
+            int lx, ly;
+            QuadraticEquation qx, qy;
+            for (int i = 0; i < height; i++)
             {
-                for(int j = 0; j < width - 1; j++)
+                xposi = 0;
+                xAp = 0;
+                for (int j = 0; j < width; j++)
                 {
+                    if (j == width - 1)
+                    {
+                        newImg[i * Multiple][j * Multiple] = img[i][j] * 100;
+                        continue;
+                    }
+                    lx = j + 2;
+                    if (j == width - 2)
+                        lx = width - 2;
+                    qx = new QuadraticEquation(new OrderedNumberPair(j, img[i][j]), new OrderedNumberPair(j + 1, img[i][j + 1]), new OrderedNumberPair(j + 2, img[i][lx]));
+                    for (int l = 0; l <= step; l++)
+                    {
+                        // 将数量维度扩展100倍,精确到小数点后两位
+                        newImg[i * Multiple][xposi] = (int)(qx.GetValue(xAp) * 100);
+                        xAp += range;
+                        xposi += 1;
+                    }
 
                 }
             }
 
-
-            return null;
+            for(int j = 0; j < width; j++)
+            {
+                for(int i = 0; i < height -1; i++)
+                {
+                    for (int w = 0; w <= step; w++)
+                    {
+                        if (j == (width - 1) && w > 0)
+                            break;
+                        if (i == height - 2)
+                            ;
+                        xposi = j * Multiple + w;
+                        yposi = i * Multiple;
+                        ly = yposi + 2 * Multiple;
+                        if (i == height - 2)
+                            ly = yposi;
+                        qy = new QuadraticEquation(new OrderedNumberPair(yposi, newImg[yposi][xposi]), new OrderedNumberPair(yposi + Multiple, newImg[yposi + Multiple][xposi]), new OrderedNumberPair(yposi + 2 * Multiple, newImg[ly][xposi]));
+                        for (int l = 0; l <= step; l++)
+                        {
+                            if (l == 0)
+                                continue;
+                            newImg[yposi + l][xposi] = (int)qy.GetValue(yposi + l);
+                        }
+                    }
+                }
+            }
+            return newImg;
         }
-
-
-
-
-
 
         /// <summary>
         /// 递归计算给定点的相关系数峰值位置

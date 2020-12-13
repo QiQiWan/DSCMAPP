@@ -555,6 +555,10 @@ namespace Gray
         {
             if (GrayBitmap == null)
                 return;
+
+
+            UnitHelper.TestInterPolation(GaussPyramids[index].OriginBitmap);
+
             // 设置极值点最小值阈值
             double level = 2;
             double.TryParse(peaklevel.Text, out level);
