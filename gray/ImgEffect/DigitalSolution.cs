@@ -418,8 +418,8 @@ namespace Gray
     public class Size
     {
         public readonly bool IsNull;
-        public readonly int Width;
-        public readonly int Height;
+        public  int Width;
+        public  int Height;
         public Size(int width, int height)
         {
             this.Width = width;
@@ -433,6 +433,12 @@ namespace Gray
         public int GetMinSize()
         {
             return Width > Height ? Height : Width;
+        }
+        public static Size operator /(Size size, double divide)
+        {
+            size.Width = (int)(1.0 * size.Width / divide);
+            size.Height = (int)(1.0 * size.Height / divide);
+            return size;
         }
         public static bool operator ==(Size s1, Size s2)
         {

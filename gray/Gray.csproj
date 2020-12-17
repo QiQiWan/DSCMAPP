@@ -61,12 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImgEffect\DigitalSolution.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImgEffect\CloudDiagramDrawer.cs" />
     <Compile Include="ImgEffect\DSCMSelector.cs" />
     <Compile Include="ImgEffect\GausiionKernelSelector.cs" />
     <Compile Include="ImgEffect\GaussPyramid.cs" />
@@ -78,13 +79,12 @@
     <Compile Include="ImgEffect\Helper\UnitHelper.cs" />
     <Compile Include="ImgEffect\MyDraw.cs" />
     <Compile Include="ImgEffect\RGBGraying.cs" />
-    <Compile Include="ImgEffect\SpeckleSearch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ImgEffect\Helper\Shell.cs" />
     <Compile Include="StripBarControl.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -21,8 +21,8 @@ namespace Gray
         {
             AllocConsole();//弹出控制台
             Shell.WriteLine(">>> 程序已启动!");
-            UnitHelper.TestQuadraticEquation();
-            Thread.Sleep(1000);
+            //UnitHelper.TestQuadraticEquation();
+            //Thread.Sleep(1000);
             Shell.WriteLine(Shell.PreDefineSearchRAM());
             Shell.WriteLine(Shell.PreDefineSearchCPU());
             Application.EnableVisualStyles();

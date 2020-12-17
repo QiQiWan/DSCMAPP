@@ -62,6 +62,12 @@ namespace Gray
                 return false;
             return true;
         }
+        public bool IsNull()
+        {
+            if (filePath == null)
+                return true;
+            return false;
+        }
         public override bool Equals(object obj)
         {
             return base.Equals(obj);

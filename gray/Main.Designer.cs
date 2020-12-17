@@ -34,6 +34,9 @@
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.graying = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.SubAreaSize = new System.Windows.Forms.TextBox();
+            this.FindAreas = new System.Windows.Forms.Button();
+            this.DOGDiff = new System.Windows.Forms.Button();
             this.RecPosition = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -75,6 +78,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.保存图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -131,6 +135,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.SubAreaSize);
+            this.groupBox1.Controls.Add(this.FindAreas);
+            this.groupBox1.Controls.Add(this.DOGDiff);
             this.groupBox1.Controls.Add(this.RecPosition);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label5);
@@ -164,6 +171,39 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "工作空间";
             // 
+            // SubAreaSize
+            // 
+            this.SubAreaSize.Location = new System.Drawing.Point(193, 525);
+            this.SubAreaSize.Name = "SubAreaSize";
+            this.SubAreaSize.Size = new System.Drawing.Size(77, 30);
+            this.SubAreaSize.TabIndex = 35;
+            // 
+            // FindAreas
+            // 
+            this.FindAreas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.FindAreas.Font = new System.Drawing.Font("SimSun", 12F);
+            this.FindAreas.Location = new System.Drawing.Point(25, 525);
+            this.FindAreas.Margin = new System.Windows.Forms.Padding(4);
+            this.FindAreas.Name = "FindAreas";
+            this.FindAreas.Size = new System.Drawing.Size(148, 32);
+            this.FindAreas.TabIndex = 34;
+            this.FindAreas.Text = "查找子区域";
+            this.FindAreas.UseVisualStyleBackColor = true;
+            this.FindAreas.Click += new System.EventHandler(this.FindAreas_Click);
+            // 
+            // DOGDiff
+            // 
+            this.DOGDiff.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.DOGDiff.Font = new System.Drawing.Font("SimSun", 12F);
+            this.DOGDiff.Location = new System.Drawing.Point(337, 488);
+            this.DOGDiff.Margin = new System.Windows.Forms.Padding(4);
+            this.DOGDiff.Name = "DOGDiff";
+            this.DOGDiff.Size = new System.Drawing.Size(124, 32);
+            this.DOGDiff.TabIndex = 33;
+            this.DOGDiff.Text = "显示DOG差分结果";
+            this.DOGDiff.UseVisualStyleBackColor = true;
+            this.DOGDiff.Click += new System.EventHandler(this.DOGDiff_Click);
+            // 
             // RecPosition
             // 
             this.RecPosition.AutoSize = true;
@@ -185,28 +225,28 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(137, 494);
+            this.label5.Location = new System.Drawing.Point(41, 494);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(109, 20);
+            this.label5.Size = new System.Drawing.Size(49, 20);
             this.label5.TabIndex = 16;
-            this.label5.Text = "极值点阈值";
+            this.label5.Text = "阈值";
             // 
             // DOGFind
             // 
             this.DOGFind.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.DOGFind.Font = new System.Drawing.Font("SimSun", 12F);
-            this.DOGFind.Location = new System.Drawing.Point(336, 488);
+            this.DOGFind.Location = new System.Drawing.Point(193, 488);
             this.DOGFind.Margin = new System.Windows.Forms.Padding(4);
             this.DOGFind.Name = "DOGFind";
-            this.DOGFind.Size = new System.Drawing.Size(138, 32);
+            this.DOGFind.Size = new System.Drawing.Size(124, 32);
             this.DOGFind.TabIndex = 31;
-            this.DOGFind.Text = "极值点查找";
+            this.DOGFind.Text = "显示极值点";
             this.DOGFind.UseVisualStyleBackColor = true;
             this.DOGFind.Click += new System.EventHandler(this.DOG_Click);
             // 
             // peaklevel
             // 
-            this.peaklevel.Location = new System.Drawing.Point(252, 488);
+            this.peaklevel.Location = new System.Drawing.Point(96, 488);
             this.peaklevel.Name = "peaklevel";
             this.peaklevel.Size = new System.Drawing.Size(77, 30);
             this.peaklevel.TabIndex = 15;
@@ -425,7 +465,8 @@
             // 
             this.编辑ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.更改图片ToolStripMenuItem,
-            this.重新计算ToolStripMenuItem});
+            this.重新计算ToolStripMenuItem,
+            this.保存图片ToolStripMenuItem});
             this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
             this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.编辑ToolStripMenuItem.Text = "编辑";
@@ -528,6 +569,13 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // 保存图片ToolStripMenuItem
+            // 
+            this.保存图片ToolStripMenuItem.Name = "保存图片ToolStripMenuItem";
+            this.保存图片ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.保存图片ToolStripMenuItem.Text = "保存图片";
+            this.保存图片ToolStripMenuItem.Click += new System.EventHandler(this.保存图片ToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
@@ -608,6 +656,10 @@
         private System.Windows.Forms.TextBox peaklevel;
         private System.Windows.Forms.Label RecPosition;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button DOGDiff;
+        private System.Windows.Forms.Button FindAreas;
+        private System.Windows.Forms.TextBox SubAreaSize;
+        private System.Windows.Forms.ToolStripMenuItem 保存图片ToolStripMenuItem;
     }
 }
 

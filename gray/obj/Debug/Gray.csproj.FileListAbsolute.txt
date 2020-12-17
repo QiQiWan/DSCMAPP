@@ -10,7 +10,6 @@ H:\study\C#实验\数字图像\gray\bin\Debug\System.Net.Http.Formatting.dll
 H:\study\C#实验\数字图像\gray\bin\Debug\MyTools.pdb
 H:\study\C#实验\数字图像\gray\bin\Debug\MyTools.dll.config
 H:\study\C#实验\数字图像\gray\bin\Debug\TencentCloud.pdb
-H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csprojAssemblyReference.cache
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe.config
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.Main.resources
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.Properties.Resources.resources
@@ -19,3 +18,4 @@ H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.CoreCompileInputs.cach
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csproj.CopyComplete
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.exe
 H:\study\C#实验\数字图像\gray\obj\Debug\Gray.pdb
+H:\study\C#实验\数字图像\gray\obj\Debug\Gray.csprojAssemblyReference.cache

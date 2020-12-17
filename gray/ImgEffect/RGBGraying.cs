@@ -193,7 +193,7 @@ namespace Gray
                 int gray = GetGrayBit(temp);
                 rgbValues[3 * i] = rgbValues[3 * i + 1] = rgbValues[3 * i + 2] = (byte)gray;
             }
-            image = ImageHelper.WriteImg(rgbValues, image.Width, image.Height);
+            image = ImageHelper.WriteGrayImg(rgbValues, image.Width, image.Height);
             return image;
         }
         /// <summary>
@@ -213,7 +213,7 @@ namespace Gray
             {
                 rgbValues[3 * i] = rgbValues[3 * i + 1] = rgbValues[3 * i + 2] = (byte)(rgbValues[3 * i] >= level ? 255 : 0);
             }
-            image = ImageHelper.WriteImg(rgbValues, image.Width, image.Height);
+            image = ImageHelper.WriteGrayImg(rgbValues, image.Width, image.Height);
             return image;
         }
 

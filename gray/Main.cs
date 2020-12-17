@@ -92,7 +92,6 @@ namespace Gray
             StatusBar.ChangeStatus(process);
             if (imageCollection[index].OriginBitmap == null)
             {
-                OpenFileDialog fileDialog = new OpenFileDialog();
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = "选择一个参考图片";
                 dialog.Filter = "图像文件|*.jpg;*.jpeg;*.png;*.bmp;";
@@ -175,11 +174,11 @@ namespace Gray
         /// <param name="bitmap"></param>
         private void DisplayImage(PictureBox pictureBox, Bitmap bitmap)
         {
-            if(bitmap.Width <=  800)
+            if (bitmap.Width <= 800)
                 pictureBox.Width = bitmap.Width;
             if (bitmap.Height <= 600)
                 pictureBox.Height = bitmap.Height;
-            if(bitmap.Width > 800)
+            if (bitmap.Width > 800)
                 previewBox.Height = (int)Math.Round((double)bitmap.Height / (double)bitmap.Width * (double)pictureBox.Width, 0);
             if (bitmap.Height > 600)
                 previewBox.Width = (int)Math.Round(1.0 * bitmap.Width / bitmap.Height * 600, 0);
@@ -350,9 +349,9 @@ namespace Gray
             {
                 case DrawType.Free: Dh.DrawDot(e); break;
                 case DrawType.Rec: Dh.Draw(e, "Rect"); break;
-                default: Dh.Draw(e, "Line");break;
+                default: Dh.Draw(e, "Line"); break;
             }
-            
+
 
             int X = (int)Common.Min(StartPoint.X, e.X), Y = (int)Common.Min(StartPoint.Y, e.Y);
             int MX = (int)Common.Max(StartPoint.X, e.X), MY = (int)Common.Max(StartPoint.Y, e.Y);
@@ -371,34 +370,36 @@ namespace Gray
             HasSelectedRectangle = true;
             SetMousePosition(e.X, e.Y);
 
-            //if (DrawingType == DrawType.Free)
-            //{
-            //    try
-            //    {
-            //        using (Image tempImage = previewBox.Image)
-            //        {
-            //            using (Graphics g = Graphics.FromImage(tempImage))
-            //            {
-            //                float widthPer = (float)tempImage.Width / (float)previewBox.Width;
-            //                float heightPer = (float)tempImage.Height / (float)previewBox.Height;
-            //                float widthInsert = 1 / widthPer;
-            //                float heightInsert = 1 / heightPer;
-            //                System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
-            //                P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
-            //                P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
-            //                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //                g.DrawLine(new Pen(Color.Red, 2), P1, currentPoint);
-            //                P1 = new System.Drawing.Point(e.X, e.Y);
-            //                DisplayImage(previewBox, new Bitmap(tempImage), true);
-            //                SetMousePosition(e.X, e.Y);
-            //            }
-            //        }
-            //    }
-            //    catch (Exception err)
-            //    {
-            //        Shell.WriteLine("### " + err.Message);
-            //    }
-            //}
+            /* 直接绘制图形的方法
+            if (DrawingType == DrawType.Free)
+            {
+                try
+                {
+                    using (Image tempImage = previewBox.Image)
+                    {
+                        using (Graphics g = Graphics.FromImage(tempImage))
+                        {
+                            float widthPer = (float)tempImage.Width / (float)previewBox.Width;
+                            float heightPer = (float)tempImage.Height / (float)previewBox.Height;
+                            float widthInsert = 1 / widthPer;
+                            float heightInsert = 1 / heightPer;
+                            System.Drawing.Point currentPoint = new System.Drawing.Point((int)(((float)e.X + widthInsert) * widthPer), (int)(((float)e.Y + widthInsert) * widthPer));
+                            P1.X = (int)(((float)P1.X + widthInsert) * widthPer);
+                            P1.Y = (int)(((float)P1.Y + widthInsert) * widthPer);
+                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                            g.DrawLine(new Pen(Color.Red, 2), P1, currentPoint);
+                            P1 = new System.Drawing.Point(e.X, e.Y);
+                            DisplayImage(previewBox, new Bitmap(tempImage), true);
+                            SetMousePosition(e.X, e.Y);
+                        }
+                    }
+                }
+                catch (Exception err)
+                {
+                    Shell.WriteLine("### " + err.Message);
+                }
+            }
+            */
         }
         private void InitDrawHelper()
         {
@@ -537,7 +538,7 @@ namespace Gray
             // UnitHelper.PrintMatrix(bitmapMatrix, AimMatrix);
 
             bitmapBuff = ImageAnalyse.IntMatrix2Bytes(AimMatrix);
-            bitmap = ImageHelper.WriteImg(bitmapBuff, width, height);
+            bitmap = ImageHelper.WriteGrayImg(bitmapBuff, width, height);
             DisplayImage(previewBox, bitmap);
 
             //StripBarMannager.Stop();
@@ -557,20 +558,42 @@ namespace Gray
                 return;
 
 
-            UnitHelper.TestInterPolation(GaussPyramids[index].OriginBitmap);
+            // UnitHelper.TestInterPolation(GaussPyramids[index].OriginBitmap);
+            UnitHelper.TestCorrelation(GaussPyramids[index].OriginBitmap);
 
             // 设置极值点最小值阈值
             double level = 2;
             double.TryParse(peaklevel.Text, out level);
+            if (level == 0)
+                level = 2;
 
             SamplingGroup sampling = GaussPyramids[index].SamplingGroups[0];
 
             GaussPyramids[index].FindExtremePoint(sampling, level);
 
-            //Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
-            //Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
+            Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
+            Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
 
-            
+            DisplayImage(previewBox, B2Img);
+
+            Console.WriteLine("计算完成!");
+            //StripBarMannager.Stop();
+        }
+
+        private void DOGDiff_Click(object sender, EventArgs e)
+        {
+            if (GrayBitmap == null)
+                return;
+
+            // 设置极值点最小值阈值
+            double level;
+            double.TryParse(peaklevel.Text, out level);
+            if (level == 0)
+                level = 2;
+            SamplingGroup sampling = GaussPyramids[index].SamplingGroups[0];
+
+            GaussPyramids[index].FindExtremePoint(sampling, level);
+
             Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].DOGScale[1], level);
 
             DisplayImage(previewBox, B2Img);
@@ -579,9 +602,80 @@ namespace Gray
             // 输出差分矩阵和极值点列表
             UnitHelper.OutputDogImg(GaussPyramids[index].DOGScale[0]);
             UnitHelper.OutputExtremPoints(GaussPyramids[index].ExtremePoints);
+        }
 
-            Console.WriteLine("计算完成!");
-            //StripBarMannager.Stop();
+        private void FindAreas_Click(object sender, EventArgs e)
+        {
+            if (!HasSelectedRectangle)
+                return;
+            if (imageCollection[0].IsNull())
+                return;
+            if (imageCollection[1].IsNull())
+                return;
+
+            Gray.Size SelectSize = new Gray.Size(SelectedRectangle.Width, SelectedRectangle.Height);
+            Gray.Size SubSize = new Size(11, 11);
+
+            //SamplingGroup sampling1 = GaussPyramids[0].SamplingGroups[0];
+            //GaussPyramids[0].FindExtremePoint(sampling1, 2);
+
+            //SamplingGroup sampling2 = GaussPyramids[1].SamplingGroups[0];
+            //GaussPyramids[1].FindExtremePoint(sampling2, 2);
+
+            //Bitmap OB = RGBGraying.Get2BWImage(GaussPyramids[0].DOGScale[0], 2);
+            //Bitmap DB = RGBGraying.Get2BWImage(GaussPyramids[1].DOGScale[0], 2);
+
+            //DisplayImage(previewBox, OB, true);
+            //DisplayImage(previewBox, DB, true);
+
+
+            int[][] origin = ImageHelper.GetGrayMatrix(imageCollection[0].GrayBitmap);
+            int[][] defor = ImageHelper.GetGrayMatrix(imageCollection[1].GrayBitmap);
+
+            ImgEffect.Point selectPoint = new ImgEffect.Point(SelectedRectangle.Left, SelectedRectangle.Top);
+
+             UnitHelper.TestSubFinding(origin, defor, selectPoint, SelectSize);
+
+            Console.WriteLine("##############################################");
+
+            DSCMSelector dSCMSelector = new DSCMSelector(origin, defor, selectPoint, SelectSize, 4);
+
+            dSCMSelector.FindSubAreaPair(SubSize);
+            
+            FeaturePair[][] featurePairs = dSCMSelector.FeaturePairs;
+
+            if (DSCMSelector.IsEmptyFeaturePairs(featurePairs))
+            {
+                MessageBox.Show("计算完成,两幅图像相等!");
+                GC.Collect();
+                return;
+            }
+
+            RGBImgStruct rGBImg = DSCMSelector.OutPutCloudDiagram(origin, featurePairs, selectPoint, SelectSize);
+
+            DisplayImage(previewBox, rGBImg.GetBitmap());
+
+            GC.Collect();
+
+            // DSCMSelector dSCMSelector = new DSCMSelector(origin, defor, selectPoint, SelectSize, 4);
+
+        }
+
+        private void 保存图片ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog openFileDialog = new SaveFileDialog();
+            openFileDialog.Title = "输入文件名";
+            openFileDialog.Filter = "图像文件|*.jpg;*.jpeg;";
+            string fileName = "";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                fileName = openFileDialog.FileName;
+                openFileDialog.Dispose();
+            }
+            if (!fileName.Contains(".jpg"))
+                fileName += ".jpg";
+            Image image = previewBox.Image;
+            image.Save(fileName);
         }
     }
 }

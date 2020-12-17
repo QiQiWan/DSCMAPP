@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gray.ImgEffect.Helper
@@ -194,6 +190,127 @@ namespace Gray.ImgEffect.Helper
             finishingImg.Dispose();
             orginalImg.Dispose();
             p.Dispose();
+        }
+
+        /// <summary>
+        /// 返回不同的变形程度对应的颜色
+        /// </summary>
+        /// <param name="Degree"></param>
+        /// <returns></returns>
+        public static int[] GetColorDegree(int Degree)
+        {
+            int R, G, B;
+
+            int period = (int)(1.0 * Degree / 25.1);
+
+            switch (period)
+            {
+                // Degree <= 25
+                case 0:
+                    {
+                        R = 0;
+                        G = 8 * Degree;
+                        B = 200;
+                        break;
+                    }
+                // Degree <= 50
+                case 1:
+                    {
+                        R = 0;
+                        G = 200;
+                        B = 200 - (Degree - 25) * 8;
+                        break;
+                    }
+                // Degree <= 75
+                case 2:
+                    {
+                        R = 8 * (Degree - 50);
+                        G = 200;
+                        B = 0;
+                        break;
+                    }
+                // Degree <= 100
+                case 3:
+                    {
+                        R = 200;
+                        G = 200 - (Degree - 75) * 8;
+                        B = 0;
+                        break;
+                    }
+                default:
+                    {
+                        R = 200;
+                        G = 200;
+                        B = 0;
+                        break;
+                    }
+            }
+            return new int[] { R, G, B};
+        }
+    }
+
+    /// <summary>
+    /// 为了不在其它类中引用 System.Drawing; 名字空间, 构造此类, 彩色图像使用一维 Byte 数组保存,同时保存图像的尺寸
+    /// </summary>
+    class RGBImgStruct
+    {
+        /// <summary>
+        /// 图像的字节数组
+        /// </summary>
+        public byte[] RGBImgByte;
+
+        /// <summary>
+        /// 图像的整型数组
+        /// </summary>
+        public int[] RGBImgInt;
+
+        /// <summary>
+        /// 图像的尺寸
+        /// </summary>
+        public int Width;
+        public int Height;
+
+        public Size ImgSize
+        {
+            get { return ImgSize; }
+            set {
+                this.Width = value.Width;
+                this.Height = value.Height;
+                if (RGBImgByte.Length != Width * Height * 3)
+                    throw new Exception("图片数组长度与所给尺寸大小不一致!");
+            }
+        }
+
+        public RGBImgStruct(byte[] rGBImg, int width, int height)
+        {
+            this.RGBImgByte = rGBImg;
+            ImgSize = new Size(width, height);
+        }
+
+        public RGBImgStruct(int[] rGBImg, int width, int height)
+        {
+            this.RGBImgByte = ImageHelper.IntArrToByteArr(rGBImg);
+            this.RGBImgInt = rGBImg;
+
+            ImgSize = new Size(width, height);
+        }
+
+        public RGBImgStruct(byte[] rGBImg, Size size)
+        {
+            this.RGBImgByte = rGBImg;
+            this.ImgSize = size;
+        }
+        public RGBImgStruct(int[] rGBImg, Size size)
+        {
+            this.RGBImgByte = ImageHelper.IntArrToByteArr(rGBImg);
+            this.RGBImgInt = rGBImg;
+            Console.WriteLine(123);
+            ImgSize = size;
+        }
+
+        public Bitmap GetBitmap()
+        {
+            return ImageHelper.WriteImg(RGBImgByte, Width, Height);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Gray
 {
@@ -76,6 +77,44 @@ namespace Gray
 
             return rgbValues;
         }
+
+        /// <summary>
+        /// 将灰度一维数组写成 Bitmap 图像
+        /// </summary>
+        /// <param name="grayValues"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        static public Bitmap WriteGrayImg(byte[] grayValues, int width, int height)
+        {
+            if (grayValues.Length != width * height && grayValues.Length != width * height * 3)
+                throw new Exception("颜色数组长度不符合图片尺寸！");
+            Bitmap bitmap = new Bitmap(width, height);
+            Rectangle rec = new Rectangle(0, 0, width, height);
+            BitmapData bitmapData = bitmap.LockBits(rec, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            IntPtr intPtr = bitmapData.Scan0;
+
+            if(grayValues.Length == width * height)
+            {
+                byte[] temp = new byte[grayValues.Length * 3];
+                for(int i = 0; i < grayValues.Length; i++)
+                {
+                    temp[3 * i] = temp[3 * i + 1] = temp[3 * i + 2] = grayValues[i];
+                }
+                grayValues = temp;
+            }
+            System.Runtime.InteropServices.Marshal.Copy(grayValues, 0, intPtr, grayValues.Length);
+            bitmap.UnlockBits(bitmapData);
+            return bitmap;
+        }
+
+        /// <summary>
+        /// 直接将彩图写成 Bitmap 图像
+        /// </summary>
+        /// <param name="rgbValues"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         static public Bitmap WriteImg(byte[] rgbValues, int width, int height)
         {
             if (rgbValues.Length != width * height && rgbValues.Length != width * height * 3)
@@ -84,20 +123,17 @@ namespace Gray
             Rectangle rec = new Rectangle(0, 0, width, height);
             BitmapData bitmapData = bitmap.LockBits(rec, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
             IntPtr intPtr = bitmapData.Scan0;
-
-            if(rgbValues.Length == width * height)
-            {
-                byte[] temp = new byte[rgbValues.Length * 3];
-                for(int i = 0; i < rgbValues.Length; i++)
-                {
-                    temp[3 * i] = temp[3 * i + 1] = temp[3 * i + 2] = rgbValues[i];
-                }
-                rgbValues = temp;
-            }
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, intPtr, rgbValues.Length);
             bitmap.UnlockBits(bitmapData);
             return bitmap;
         }
+        /// <summary>
+        /// 将灰度矩阵转成 Bitmap 图像
+        /// </summary>
+        /// <param name="grayMatrix"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         static public Bitmap WriteGrayImg(int[][] grayMatrix, int width, int height)
         {
             byte[] rgbValues = new byte[width * height * 3];
@@ -110,11 +146,28 @@ namespace Gray
                     position += 3;
                 }
             }
-            return WriteImg(rgbValues, width, height);
+            return WriteGrayImg(rgbValues, width, height);
         }
+
         static public Bitmap WriteGrayImg(int[][] grayMatrix, Size size)
         {
             return WriteGrayImg(grayMatrix, size.Width, size.Height);
+        }
+
+        /// <summary>
+        /// 将整型数组转为字节型数组
+        /// </summary>
+        /// <param name="intArr"></param>
+        /// <returns></returns>
+        public static byte[] IntArrToByteArr(int[] intArr)
+        {
+            int intSize = intArr.Length;
+            byte[] bytArr = new byte[intSize];
+            for( int i = 0;i < intSize; i++)
+            {
+                bytArr[i] = Convert.ToByte(intArr[i]);
+            }
+            return bytArr;
         }
     }
 }

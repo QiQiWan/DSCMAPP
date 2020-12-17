@@ -133,12 +133,12 @@ class QuadraticEquation
                 }; break;
             case 1:
                 {
-                    for(int i = 1; i < 3; i++)
+                    for (int i = 1; i < 3; i++)
                     {
-                        if(Contains(index, i))
+                        if (Contains(index, i))
                         {
                             double S = matrix[i][1] / matrix[0][1];
-                            for(int j = 1; j < 4; j++)
+                            for (int j = 1; j < 4; j++)
                             {
                                 matrix[i][j] = matrix[i][j] - matrix[0][j] * S;
                             }
@@ -160,7 +160,7 @@ class QuadraticEquation
     }
     private bool Contains(int[] container, int ele)
     {
-        foreach(var e in  container)
+        foreach (var e in container)
         {
             if (e == ele)
                 return true;
@@ -215,6 +215,7 @@ class QuadraticEquation
         return $"f(x) = {A0} + {A1}x + {A2}x^2";
     }
 }
+
 /// <summary>
 /// 有序数对结构
 /// </summary>

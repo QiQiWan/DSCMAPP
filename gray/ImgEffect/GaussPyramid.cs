@@ -347,18 +347,19 @@ namespace Gray.ImgEffect
     }
     public struct FPoint
     {
-        public float X;
-        public float Y;
-        public readonly float Step;
-        public FPoint(float X, float Y, float step)
+        public double X;
+        public double Y;
+        public readonly double Range;
+        public FPoint(double X, double Y, double range)
         {
             this.X = X;
             this.Y = Y;
-            this.Step = step;
+            this.Range = range;
         }
+
         public static bool operator ==(FPoint p1, FPoint p2)
         {
-            if (p1.X == p2.X && p1.Y == p2.Y && p1.Step == p2.Step)
+            if (p1.X == p2.X && p1.Y == p2.Y)
                 return true;
             return false;
         }
@@ -370,11 +371,31 @@ namespace Gray.ImgEffect
         }
         public override string ToString()
         {
-            return $"({X}-{Y}-{Step})";
+            return $"{X},{Y}";
         }
-        public void MoveRight() => this.X += Step;
-        public void MoveLeft() => X -= Step;
-        public void MoveTop() => Y -= Step;
-        public void MoveDown() => Y += Step;
+        public void MoveRight() => this.X += Range;
+        public void MoveLeft() => X -= Range;
+        public void MoveTop() => Y -= Range;
+        public void MoveDown() => Y += Range;
+        public void MoveLeftTop()
+        {
+            X -= Range;
+            Y -= Range;
+        }
+        public void MoveRightTop()
+        {
+            X += Range;
+            Y -= Range;
+        }
+        public void MoveLeftDown()
+        {
+            X -= Range;
+            Y += Range;
+        }
+        public void MoveRightDown()
+        {
+            X += Range;
+            Y -= Range;
+        }
     }
 }
