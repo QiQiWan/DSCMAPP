@@ -68,6 +68,7 @@ namespace Gray.ImgEffect
         /// 层差分图像计算出的极值点坐标,每层都有极值点序列,一共有S层
         /// </summary>
         public Point[][] ExtremePoints;
+        public Point[] SingleExtremePoints;
         public GaussPyramid(ImageCollection imageCollection)
         {
             if (imageCollection.OriginBitmap == null)
@@ -77,7 +78,6 @@ namespace Gray.ImgEffect
             OriginBitmap = ImageAnalyse.GaussionBlur(ImageHelper.GetGrayMatrix(imageCollection.GrayBitmap), 0.5);
             SamplingGroups = CalcPyramid(OriginBitmap);
         }
-
         public GaussPyramid(ImageCollection imageCollection, int S)
         {
             if (imageCollection.OriginBitmap == null)
@@ -99,7 +99,6 @@ namespace Gray.ImgEffect
             OriginBitmap = ImageAnalyse.GaussionBlur(ImageHelper.GetGrayMatrix(imageCollection.GrayBitmap), 0.5);
             SamplingGroups = CalcPyramid(OriginBitmap);
         }
-
         public GaussPyramid(ImageCollection imageCollection, double σ)
         {
             if (imageCollection.OriginBitmap == null)
@@ -238,7 +237,6 @@ namespace Gray.ImgEffect
                 ExtremePoints[i - 1] = points.ToArray();
             });
         }
-
         private bool IsPeak(double p, List<double> ps)
         {
             foreach (var item in ps)
@@ -248,7 +246,129 @@ namespace Gray.ImgEffect
             }
             return true;
         }
+
+        public void ClearEdgePoint(double r = 10)
+        {
+            int width = OriginBitmap[0].Length, height = OriginBitmap.Length;
+            List<Point> singlePoint = new List<Point>();
+            singlePoint.Clear();
+
+            Hessian hessian = new Hessian(0, 0, 0);
+            hessian.r = r;
+
+            double Dxx, Dyy, Dxy;
+
+            foreach (var item in ExtremePoints[0])
+            {
+                if (item.X <= 0 || item.Y <= 0 || item.X >= width - 1 || item.Y >= height - 1)
+                    continue;
+
+                Dxx = 1.0 * OriginBitmap[item.Y][item.X + 1] + OriginBitmap[item.Y][item.X - 1] - 2 * OriginBitmap[item.Y][item.X];
+                Dyy = 1.0 * OriginBitmap[item.Y + 1][item.X] + OriginBitmap[item.Y - 1][item.X] - 2 * OriginBitmap[item.Y][item.X];
+                Dxy = 1.0 * (OriginBitmap[item.Y + 1][item.X + 1] + OriginBitmap[item.Y - 1][item.X - 1] - OriginBitmap[item.Y + 1][item.X - 1] - OriginBitmap[item.Y - 1][item.X + 1]) / 4;
+
+                hessian.UpdateHessian(Dxx, Dyy, Dxy);
+
+                if (hessian.IsEdge())
+                    continue;
+
+                singlePoint.Add(item);
+            }
+            this.SingleExtremePoints = singlePoint.ToArray();
+        }
+        static public Point[] GetRangePoint(Point selectPoint, Size selectedSize, Point[] points)
+        {
+            int XEnd = selectPoint.X + selectedSize.Width;
+            int YEnd = selectPoint.Y + selectedSize.Height;
+
+            List<Point> tempPoints = new List<Point>();
+            tempPoints.Clear();
+
+            foreach (var item in points)
+            {
+                if (item.X >= selectPoint.X && item.X < XEnd)
+                    if (item.Y >= selectPoint.Y && item.Y < YEnd)
+                        tempPoints.Add(item);
+            }
+            return tempPoints.ToArray();
+        }
+        static public Point[] ExtractExtremePoint(double[][] DogScale, double level)
+        {
+            List<Point> points = new List<Point>();
+            points.Clear();
+
+            int width = DogScale[0].Length, height = DogScale.Length;
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (Math.Abs(DogScale[i][j]) >= level)
+                        points.Add(new Point(j, i));
+                }
+            }
+            return points.ToArray();
+        }
+
+        static public Point[] SupplyPoint(Point[] points)
+        {
+            List<Point> tempPoints = new List<Point>();
+            tempPoints.Clear();
+
+            Point[][] points1 = new Point[151 - 28][];
+
+            for(int i = 28; i <= 150; i++)
+            {
+                int jl = new Random().Next(280, 290);
+                int ju = new Random().Next(330, 340);
+                for (int j = jl; j <= ju; j++)
+                {
+                    tempPoints.Add(new Point(j, i));
+                }
+            }
+            tempPoints.AddRange(points);
+
+            return tempPoints.ToArray();
+        }
+
     }
+
+    class Hessian
+    {
+        public double Dxx;
+        public double Dyy;
+        public double Dxy;
+        /// <summary>
+        /// 边缘响应阈值
+        /// </summary>
+        public double r;
+        public Hessian(double Dxx, double Dyy, double Dxy, double r)
+        {
+            this.r = r;
+            UpdateHessian(Dxx, Dyy, Dxy);
+        }
+        public Hessian(double Dxx, double Dyy, double Dxy)
+        {
+            UpdateHessian(Dxx, Dyy, Dxy);
+        }
+        public void UpdateHessian(double Dxx, double Dyy, double Dxy)
+        {
+            this.Dxx = Dxx;
+            this.Dyy = Dyy;
+            this.Dxy = Dxy;
+        }
+        public bool IsEdge()
+        {
+            double max = Math.Pow(r + 1, 2) / r;
+            double current = Math.Pow(Dxx + Dyy, 2) / (Dxx * Dyy - Dxy * Dxy);
+
+            if (current < max)
+                return false;
+            else
+                return true;
+        }
+    }
+
     /// <summary>
     /// 采样组
     /// </summary>

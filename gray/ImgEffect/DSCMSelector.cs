@@ -1,6 +1,5 @@
 ﻿using Gray.ImgEffect.Helper;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Gray.ImgEffect
@@ -171,9 +170,9 @@ namespace Gray.ImgEffect
             int PX = OX, PY = OY;
             int[] originA = GetGrayArray(origin);
 
-            for (int i = YStart; i < YEnd; i++)
+            for (int i = YStart; i < YEnd - 1; i++)
             {
-                for (int j = XStart; j < XEnd; j++)
+                for (int j = XStart; j < XEnd - 1; j++)
                 {
                     int[] deforA = GetGrayArray(scale, j, i, new Size(width, height));
                     Corre = CalCorration(originA, deforA);
@@ -222,8 +221,6 @@ namespace Gray.ImgEffect
                 // 上侧
                 if (OY > 0)
                 {
-                    if (OY == 0)
-                        ;
                     UU = CalCorration(originA, GetGrayArray(scale, OX, OY - 1, width, height));
                     if (max < UU)
                         max = UU;
@@ -238,6 +235,8 @@ namespace Gray.ImgEffect
                 // 下侧
                 if (OY + height < SH - 1)
                 {
+                    if (OY + height >= SH - 1)
+                        ;
                     UD = CalCorration(originA, GetGrayArray(scale, OX, OY + 1, width, height));
                     if (max < UD)
                         max = UD;
@@ -245,8 +244,6 @@ namespace Gray.ImgEffect
                 // 左上
                 if (OX > 0 && OY > 0)
                 {
-                    if (OY == 0)
-                        ;
                     ULU = CalCorration(originA, GetGrayArray(scale, OX - 1, OY - 1, width, height));
                     if (max < ULU)
                         max = ULU;
@@ -254,8 +251,6 @@ namespace Gray.ImgEffect
                 // 右上
                 if (OX + width < SW - 1 && OY > 0)
                 {
-                    if (OY == 0)
-                        ;
                     URU = CalCorration(originA, GetGrayArray(scale, OX + 1, OY - 1, width, height));
                     if (max < URU)
                         max = URU;
@@ -263,6 +258,8 @@ namespace Gray.ImgEffect
                 // 左下
                 if (OX > 0 && OY + height < SH - 1)
                 {
+                    if (OY + height >= SH - 1)
+                        ;
                     ULD = CalCorration(originA, GetGrayArray(scale, OX - 1, OY + 1, width, height));
                     if (max < ULD)
                         max = ULD;
@@ -270,6 +267,8 @@ namespace Gray.ImgEffect
                 // 右下
                 if (OX + width < SW - 1 && OY + height < SH - 1)
                 {
+                    if (OY + height >= SH - 1)
+                        ;
                     URD = CalCorration(originA, GetGrayArray(scale, OX + 1, OY + 1, width, height));
                     if (max < URD)
                         max = URD;
@@ -384,49 +383,84 @@ namespace Gray.ImgEffect
 
             this.FeaturePairs = featurePairs;
         }
-        static public FeaturePair[] FindSubAreaPair(Size subSize, int[][] origin, int[][] defor, Point[] ExtremePoints, Point selectPoint, Size selectedSize, int step)
+        static public FeaturePair[][] FindSubAreaPair(Size subSize, int[][] origin, int[][] defor, Point[] ExtremePoints, Point selectPoint, Size selectedSize, int step)
         {
             int[][] selectedOrigin = GetGrayMatrix(origin, selectPoint, selectedSize);
-            int[][] selectedDefor = GetGrayMatrix(defor, selectPoint, selectedSize);
+            int[][] selectedDefor = ImageAnalyse.InitMatrix<int>(selectedSize.Width, selectedSize.Height);
+
+
+            for (int i = 0; i < selectedSize.Height; i++)
+            {
+                for (int j = 0; j < selectedSize.Width; j++)
+                {
+                    selectedOrigin[i][j] = origin[i + selectPoint.Y][j + selectPoint.X];
+                }
+            }
+
+            FPoint originPoint = new FPoint(selectPoint.X, selectPoint.Y, 1);
+            FeaturePair dFeaturePair = FindFeaturePair(selectedOrigin, defor, selectPoint.X, selectPoint.Y, originPoint, originPoint);
+            for (int i = 0; i < selectedSize.Height; i++)
+            {
+                for (int j = 0; j < selectedSize.Width; j++)
+                {
+                    selectedDefor[i][j] = defor[(int)(i + dFeaturePair.DP.Y)][(int)(j + dFeaturePair.DP.X)];
+                }
+            }
+
             int[][] ExtendOrigin = InterPolation(selectedOrigin, step);
             int[][] ExtendDefor = InterPolation(selectedDefor, step);
             int Multiple = step + 1;
             double Range = 1.0 / Multiple;
             int len = ExtremePoints.Length;
-            List<FeaturePair> featurePairs = new List<FeaturePair>();
-            featurePairs.Clear();
 
-            for (int i = 0; i < len; i++)
+            FeaturePair[][] featurePairs = ImageAnalyse.InitMatrix<FeaturePair>(selectedSize.Width, selectedSize.Height);
+
+            Parallel.For(0, len, i =>
             {
                 int[][] SubOrigin = ImageAnalyse.InitMatrix<int>(subSize);
                 int oX = ExtremePoints[i].X - selectPoint.X;
                 int oY = ExtremePoints[i].Y - selectPoint.Y;
-                FPoint OAP = new FPoint(oX, oY, 1);
-
-
-                for (int l = 0; l < subSize.Height; l++)
+                if (featurePairs[oY][oX] == null)
                 {
-                    for (int m = 0; m < subSize.Width; m++)
-                    {
-                        SubOrigin[l][m] = selectedOrigin[BorderAdjust(oY + l, 0, selectedSize.Height)][BorderAdjust(oX + m, 0, selectedSize.Width)];
-                    }
-                }
-                FeaturePair feature = FindFeaturePair(SubOrigin, selectedDefor, oX, oY, OAP, OAP);
-                if (feature.OP != feature.DP)
-                {
-                    FPoint DAP = new FPoint(feature.DP.X, feature.DP.Y, Range);
-                    for (int l = 0; l < subSize.Height; i++)
+                    FPoint OAP = new FPoint(ExtremePoints[i].X, ExtremePoints[i].Y, 1);
+
+                    for (int l = 0; l < subSize.Height; l++)
                     {
                         for (int m = 0; m < subSize.Width; m++)
                         {
-                            SubOrigin[l][m] = ExtendOrigin[oY + l][oX + m];
+                            SubOrigin[l][m] = selectedOrigin[BorderAdjust(oY + l, 0, selectedSize.Height - 1)][BorderAdjust(oX + m, 0, selectedSize.Width - 1)];
                         }
                     }
-                    feature = FindFeaturePair(SubOrigin, ExtendDefor, oX * Multiple, oY * Multiple, OAP, DAP);
-                    featurePairs.Add(feature);
+
+                    FeaturePair feature = FindFeaturePair(SubOrigin, selectedDefor, oX, oY, OAP, OAP);
+                    if (feature.OP != feature.DP)
+                    {
+                        FPoint DAP = new FPoint(feature.DP.X, feature.DP.Y, Range);
+                        for (int l = 0; l < subSize.Height; l++)
+                        {
+                            for (int m = 0; m < subSize.Width; m++)
+                            {
+                                SubOrigin[l][m] = ExtendOrigin[oY + l][oX + m];
+                            }
+                        }
+                        feature = FindFeaturePair(SubOrigin, ExtendDefor, oX * Multiple, oY * Multiple, OAP, DAP);
+                    }
+                    featurePairs[oY][oX] = feature;
+                }
+            });
+            for (int i = 0; i < selectedSize.Height; i++)
+            {
+                for (int j = 0; j < selectedSize.Width; j++)
+                {
+
+                    if (featurePairs[i][j] != null)
+                        continue;
+
+                    FPoint OAP = new FPoint(0, 0, 1);
+                    featurePairs[i][j] = new FeaturePair(OAP, OAP, subSize);
                 }
             }
-            return featurePairs.ToArray();
+            return featurePairs;
         }
 
         public void FindSubAreaPair(Size subSize, int step = 1)
@@ -514,13 +548,14 @@ namespace Gray.ImgEffect
         static public int[] GetGrayArray(int[][] scale, int X, int Y, int width, int height)
         {
             int len = width * height;
+            int SW = scale[0].Length, SH = scale.Length;
             int[] array = new int[len];
             int position = 0;
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    array[position] = scale[i + Y][j + X];
+                    array[position] = scale[BorderAdjust(i + Y, 0, SH - 1)][BorderAdjust(j + X, 0, SW - 1)];
                     position++;
                 }
             }
@@ -683,9 +718,9 @@ namespace Gray.ImgEffect
             return featurePairs;
         }
 
-        static public RGBImgStruct OutPutCloudDiagram(int[][] origin, FeaturePair[][] featurePairs, Point SelectPoint, Size SelectedSize)
+        static public RGBImgStruct OutPutCloudDiagram(int[][] origin, FeaturePair[][] featurePairs, Point SelectPoint, Size SelectedSize, int step = 10)
         {
-            featurePairs = CalPairDegree(featurePairs);
+            featurePairs = CalPairDegree(featurePairs, step);
             Size OSize = ImageAnalyse.GetImgSize<int>(origin);
             Size subSize = featurePairs[0][0].CSize;
             int[] rGBImg = new int[OSize.Width * OSize.Height * 3], RGB;

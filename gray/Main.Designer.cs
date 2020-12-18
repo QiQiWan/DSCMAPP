@@ -66,6 +66,7 @@
             this.编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.更改图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.重新计算ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.保存图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.RAMDisplay = new System.Windows.Forms.ToolStripStatusLabel();
@@ -78,7 +79,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.保存图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExtremDiagram = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -135,6 +136,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ExtremDiagram);
             this.groupBox1.Controls.Add(this.SubAreaSize);
             this.groupBox1.Controls.Add(this.FindAreas);
             this.groupBox1.Controls.Add(this.DOGDiff);
@@ -173,7 +175,7 @@
             // 
             // SubAreaSize
             // 
-            this.SubAreaSize.Location = new System.Drawing.Point(193, 525);
+            this.SubAreaSize.Location = new System.Drawing.Point(352, 528);
             this.SubAreaSize.Name = "SubAreaSize";
             this.SubAreaSize.Size = new System.Drawing.Size(77, 30);
             this.SubAreaSize.TabIndex = 35;
@@ -185,9 +187,9 @@
             this.FindAreas.Location = new System.Drawing.Point(25, 525);
             this.FindAreas.Margin = new System.Windows.Forms.Padding(4);
             this.FindAreas.Name = "FindAreas";
-            this.FindAreas.Size = new System.Drawing.Size(148, 32);
+            this.FindAreas.Size = new System.Drawing.Size(274, 32);
             this.FindAreas.TabIndex = 34;
-            this.FindAreas.Text = "查找子区域";
+            this.FindAreas.Text = "查找子区域绘制云图";
             this.FindAreas.UseVisualStyleBackColor = true;
             this.FindAreas.Click += new System.EventHandler(this.FindAreas_Click);
             // 
@@ -195,10 +197,10 @@
             // 
             this.DOGDiff.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.DOGDiff.Font = new System.Drawing.Font("SimSun", 12F);
-            this.DOGDiff.Location = new System.Drawing.Point(337, 488);
+            this.DOGDiff.Location = new System.Drawing.Point(311, 489);
             this.DOGDiff.Margin = new System.Windows.Forms.Padding(4);
             this.DOGDiff.Name = "DOGDiff";
-            this.DOGDiff.Size = new System.Drawing.Size(124, 32);
+            this.DOGDiff.Size = new System.Drawing.Size(155, 32);
             this.DOGDiff.TabIndex = 33;
             this.DOGDiff.Text = "显示DOG差分结果";
             this.DOGDiff.UseVisualStyleBackColor = true;
@@ -225,7 +227,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(41, 494);
+            this.label5.Location = new System.Drawing.Point(31, 494);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(49, 20);
             this.label5.TabIndex = 16;
@@ -235,7 +237,7 @@
             // 
             this.DOGFind.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.DOGFind.Font = new System.Drawing.Font("SimSun", 12F);
-            this.DOGFind.Location = new System.Drawing.Point(193, 488);
+            this.DOGFind.Location = new System.Drawing.Point(175, 488);
             this.DOGFind.Margin = new System.Windows.Forms.Padding(4);
             this.DOGFind.Name = "DOGFind";
             this.DOGFind.Size = new System.Drawing.Size(124, 32);
@@ -246,7 +248,7 @@
             // 
             // peaklevel
             // 
-            this.peaklevel.Location = new System.Drawing.Point(96, 488);
+            this.peaklevel.Location = new System.Drawing.Point(86, 488);
             this.peaklevel.Name = "peaklevel";
             this.peaklevel.Size = new System.Drawing.Size(77, 30);
             this.peaklevel.TabIndex = 15;
@@ -265,7 +267,7 @@
             // 
             // GaossionCor
             // 
-            this.GaossionCor.Location = new System.Drawing.Point(397, 451);
+            this.GaossionCor.Location = new System.Drawing.Point(389, 451);
             this.GaossionCor.Name = "GaossionCor";
             this.GaossionCor.Size = new System.Drawing.Size(77, 30);
             this.GaossionCor.TabIndex = 29;
@@ -474,15 +476,22 @@
             // 更改图片ToolStripMenuItem
             // 
             this.更改图片ToolStripMenuItem.Name = "更改图片ToolStripMenuItem";
-            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.更改图片ToolStripMenuItem.Size = new System.Drawing.Size(178, 30);
             this.更改图片ToolStripMenuItem.Text = "更改图片";
             this.更改图片ToolStripMenuItem.Click += new System.EventHandler(this.ChooseFile_Click);
             // 
             // 重新计算ToolStripMenuItem
             // 
             this.重新计算ToolStripMenuItem.Name = "重新计算ToolStripMenuItem";
-            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
+            this.重新计算ToolStripMenuItem.Size = new System.Drawing.Size(178, 30);
             this.重新计算ToolStripMenuItem.Text = "重新计算";
+            // 
+            // 保存图片ToolStripMenuItem
+            // 
+            this.保存图片ToolStripMenuItem.Name = "保存图片ToolStripMenuItem";
+            this.保存图片ToolStripMenuItem.Size = new System.Drawing.Size(178, 30);
+            this.保存图片ToolStripMenuItem.Text = "保存图片";
+            this.保存图片ToolStripMenuItem.Click += new System.EventHandler(this.保存图片ToolStripMenuItem_Click);
             // 
             // 帮助ToolStripMenuItem
             // 
@@ -569,12 +578,18 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // 保存图片ToolStripMenuItem
+            // ExtremDiagram
             // 
-            this.保存图片ToolStripMenuItem.Name = "保存图片ToolStripMenuItem";
-            this.保存图片ToolStripMenuItem.Size = new System.Drawing.Size(224, 30);
-            this.保存图片ToolStripMenuItem.Text = "保存图片";
-            this.保存图片ToolStripMenuItem.Click += new System.EventHandler(this.保存图片ToolStripMenuItem_Click);
+            this.ExtremDiagram.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.ExtremDiagram.Font = new System.Drawing.Font("SimSun", 12F);
+            this.ExtremDiagram.Location = new System.Drawing.Point(25, 565);
+            this.ExtremDiagram.Margin = new System.Windows.Forms.Padding(4);
+            this.ExtremDiagram.Name = "ExtremDiagram";
+            this.ExtremDiagram.Size = new System.Drawing.Size(274, 32);
+            this.ExtremDiagram.TabIndex = 36;
+            this.ExtremDiagram.Text = "查找极值点绘制云图";
+            this.ExtremDiagram.UseVisualStyleBackColor = true;
+            this.ExtremDiagram.Click += new System.EventHandler(this.ExtremDiagram_Click);
             // 
             // Main
             // 
@@ -660,6 +675,7 @@
         private System.Windows.Forms.Button FindAreas;
         private System.Windows.Forms.TextBox SubAreaSize;
         private System.Windows.Forms.ToolStripMenuItem 保存图片ToolStripMenuItem;
+        private System.Windows.Forms.Button ExtremDiagram;
     }
 }
 

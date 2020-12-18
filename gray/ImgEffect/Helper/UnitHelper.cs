@@ -107,6 +107,27 @@ namespace Gray.Unit
             }
             FileHelper.WriteFile("points.csv", outputs, WriteMode.WriteAll);
         }
+
+        /// <summary>
+        /// 测试输出极值点
+        /// </summary>
+        /// <param name="points"></param>
+        static public void OutputExtremPoints(Point[] points)
+        {
+            int l = points.Length;
+            string[] outputs = new string[l + 1];
+            string line = "";
+            for (int i = 0; i < l; i++)
+            {
+                line += $"P{i + 1},";
+            }
+            outputs[0] = line;
+            for (int j = 0; j < l; j++)
+            {
+                outputs[j + 1] = points[j].ToString();
+            }
+            FileHelper.WriteFile("points.csv", outputs, WriteMode.WriteAll);
+        }
         /// <summary>
         /// 测试二次函数求解方程
         /// </summary>

@@ -559,7 +559,7 @@ namespace Gray
 
 
             // UnitHelper.TestInterPolation(GaussPyramids[index].OriginBitmap);
-            UnitHelper.TestCorrelation(GaussPyramids[index].OriginBitmap);
+            // UnitHelper.TestCorrelation(GaussPyramids[index].OriginBitmap);
 
             // 设置极值点最小值阈值
             double level = 2;
@@ -570,6 +570,7 @@ namespace Gray
             SamplingGroup sampling = GaussPyramids[index].SamplingGroups[0];
 
             GaussPyramids[index].FindExtremePoint(sampling, level);
+            //GaussPyramids[index].ClearEdgePoint(level);
 
             Size size = ImageAnalyse.GetImgSize(GaussPyramids[index].OriginBitmap);
             Bitmap B2Img = RGBGraying.Get2BWImage(GaussPyramids[index].ExtremePoints[0], size);
@@ -634,14 +635,14 @@ namespace Gray
 
             ImgEffect.Point selectPoint = new ImgEffect.Point(SelectedRectangle.Left, SelectedRectangle.Top);
 
-             UnitHelper.TestSubFinding(origin, defor, selectPoint, SelectSize);
+            // UnitHelper.TestSubFinding(origin, defor, selectPoint, SelectSize);
 
             Console.WriteLine("##############################################");
 
             DSCMSelector dSCMSelector = new DSCMSelector(origin, defor, selectPoint, SelectSize, 4);
 
             dSCMSelector.FindSubAreaPair(SubSize);
-            
+
             FeaturePair[][] featurePairs = dSCMSelector.FeaturePairs;
 
             if (DSCMSelector.IsEmptyFeaturePairs(featurePairs))
@@ -651,7 +652,13 @@ namespace Gray
                 return;
             }
 
-            RGBImgStruct rGBImg = DSCMSelector.OutPutCloudDiagram(origin, featurePairs, selectPoint, SelectSize);
+            // 空区平滑步长
+            int step;
+            int.TryParse(SubAreaSize.Text, out step);
+            if (step == 0)
+                step = 17;
+
+            RGBImgStruct rGBImg = DSCMSelector.OutPutCloudDiagram(origin, featurePairs, selectPoint, SelectSize, step);
 
             DisplayImage(previewBox, rGBImg.GetBitmap());
 
@@ -676,6 +683,71 @@ namespace Gray
                 fileName += ".jpg";
             Image image = previewBox.Image;
             image.Save(fileName);
+        }
+
+        private void ExtremDiagram_Click(object sender, EventArgs e)
+        {
+
+            if (GrayBitmap == null)
+                return;
+            if (!HasSelectedRectangle)
+                return;
+            if (imageCollection[0].IsNull())
+                return;
+            if (imageCollection[1].IsNull())
+                return;
+
+            // UnitHelper.TestInterPolation(GaussPyramids[index].OriginBitmap);
+            // UnitHelper.TestCorrelation(GaussPyramids[index].OriginBitmap);
+
+            // 设置极值点最小值阈值
+            double level = 2;
+            double.TryParse(peaklevel.Text, out level);
+            if (level == 0)
+                level = 2;
+
+            Gray.Size SelectSize = new Gray.Size(SelectedRectangle.Width, SelectedRectangle.Height);
+            Gray.Size SubSize = new Size(11, 11);
+            ImgEffect.Point selectPoint = new ImgEffect.Point(SelectedRectangle.Left, SelectedRectangle.Top);
+
+            //foreach (var item in GaussPyramids)
+            //{
+            //    item.FindExtremePoint(item.SamplingGroups[0], level);
+            //    item.ClearEdgePoint(100);
+            //}
+
+            int[][] origin = ImageHelper.GetGrayMatrix(imageCollection[0].GrayBitmap);
+            int[][] defor = ImageHelper.GetGrayMatrix(imageCollection[1].GrayBitmap);
+
+            GaussPyramids[0].FindExtremePoint(GaussPyramids[0].SamplingGroups[0], level);
+
+            Gray.ImgEffect.Point[] ExtremePoint = GaussPyramid.ExtractExtremePoint(GaussPyramids[0].DOGScale[1], level);
+
+            ExtremePoint = GaussPyramid.GetRangePoint(selectPoint, SelectSize, ExtremePoint);
+            ExtremePoint = GaussPyramid.SupplyPoint(ExtremePoint);
+
+            // UnitHelper.OutputExtremPoints(ExtremePoint);
+
+            FeaturePair[][] featurePairs = DSCMSelector.FindSubAreaPair(SubSize, origin, defor, ExtremePoint, selectPoint, SelectSize, 10);
+
+            if (DSCMSelector.IsEmptyFeaturePairs(featurePairs))
+            {
+                MessageBox.Show("计算完成,两幅图像相等!");
+                GC.Collect();
+                return;
+            }
+
+            int step;
+            int.TryParse(SubAreaSize.Text, out step);
+            if (step == 0)
+                step = 17;
+
+            RGBImgStruct rGBImg = DSCMSelector.OutPutCloudDiagram(origin, featurePairs, selectPoint, SelectSize, step);
+
+            DisplayImage(previewBox, rGBImg.GetBitmap());
+
+            GC.Collect();
+
         }
     }
 }
